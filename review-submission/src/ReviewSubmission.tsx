@@ -15,10 +15,11 @@ import {
   initialState,
 } from "./AppContext";
 import { SET_SELECTED_TASKS } from "./actions/setSelectedTasks";
-import flatten from "lodash/flatten";
-import StackblitzSDK from "@stackblitz/sdk";
 // @ts-ignore
 import { Helmet } from "react-helmet";
+import BasicTabs from "./components/BasicTabs";
+import Editor from "./components/Editor";
+import Overview from "./components/Overview";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -88,16 +89,6 @@ const ReviewSubmission = () => {
     filterByFormula: `{Record ID} = '${params.recordId}'`,
   });
 
-  const [selectedClient, setSelectedClient] = useState<any | null>(null);
-  const [tripName, setTripName] = useState("");
-  const [location, setLocation] = useState<PlaceType | null>(null);
-  const [locationCoordinates, setLocationCoordinates] = useState(null);
-  const [selectedTaskList, setSelectedTaskList] = useState<any[] | null>(null);
-  const [departureDate, setDepartureDate] = useState<any | null>(null);
-  const [returnDate, setReturnDate] = useState<any | null>(null);
-  const [totalTravellerCount, setTotalTravellerCount] = useState(0);
-  const [notes, setNotes] = useState("");
-
   const [formIsSubmitting, setFormIsSubmitting] = useState(false);
 
   // @ts-ignore
@@ -126,29 +117,6 @@ const ReviewSubmission = () => {
     submitForm();
   };
 
-  useEffect(() => {
-    async function initializeEditor() {
-      const vm = ((window as any).stackblitzVM =
-        await StackblitzSDK.embedProject(
-          "editor",
-          {
-            files: JSON.parse(submission[0]["Contents"]),
-            title: submission[0]["Name"],
-            description: "",
-            template: "create-react-app",
-          },
-          {
-            openFile: Object.keys(JSON.parse(submission[0]["Contents"]))[0],
-            height: window.innerHeight - 70,
-          }
-        ));
-    }
-
-    if (submission) {
-      initializeEditor();
-    }
-  }, [submission]);
-
   return submissionLoading ? null : (
     <AppDataContext.Provider value={contextValue}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -161,31 +129,30 @@ const ReviewSubmission = () => {
           `}</style>
         </Helmet>
         <Container maxWidth={false} style={{ padding: 0 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={4}>
-              <Stack spacing={2} pl={2}>
-                <Typography variant="h6">{submission[0]["Name"]}</Typography>
-                <Stack direction="row-reverse" spacing={2}>
-                  <LoadingButton
-                    loading={formIsSubmitting}
-                    variant="contained"
-                    onClick={onSubmit}
-                  >
-                    Save
-                  </LoadingButton>
-                  <Button
-                    variant="outlined"
-                    onClick={() => (window.location.href = "/onboarding")}
-                  >
-                    Cancel
-                  </Button>
-                </Stack>
-              </Stack>
-            </Grid>
-            <Grid item xs={8} sx={{ position: "relative" }}>
-              <div id="editor"></div>
-            </Grid>
-          </Grid>
+          <BasicTabs
+            tabItems={[
+              {
+                label: "Overview",
+                content: <Overview submission={submission} />,
+              },
+              {
+                label: "Editor",
+                content: <Editor submission={submission} />,
+              },
+            ]}
+            actions={[
+              <Button variant="outlined" onClick={() => {}}>
+                Save Draft
+              </Button>,
+              <LoadingButton
+                loading={formIsSubmitting}
+                variant="contained"
+                onClick={onSubmit}
+              >
+                Submit
+              </LoadingButton>,
+            ]}
+          />
         </Container>
       </LocalizationProvider>
     </AppDataContext.Provider>
