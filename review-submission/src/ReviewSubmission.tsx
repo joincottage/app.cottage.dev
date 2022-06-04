@@ -124,11 +124,29 @@ const ReviewSubmission = () => {
           <style>{`
           iframe { border: none; }
           .container { max-width: none !important; }
-          #custom-code1 { padding-top: 0 !important; padding-bottom: 0 !important; }
+          #custom-code1 {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            right: 0;
+            left: 0;
+          }
           .col-12 { padding: 0 !important; }
           `}</style>
         </Helmet>
-        <Container maxWidth={false} style={{ padding: 0 }}>
+        <Container
+          maxWidth={false}
+          style={{
+            padding: 0,
+            position: "absolute",
+            top: 0,
+            right: 0,
+            left: 0,
+            bottom: 0,
+          }}
+        >
           <BasicTabs
             tabItems={[
               {
@@ -141,6 +159,12 @@ const ReviewSubmission = () => {
               },
             ]}
             actions={[
+              <Button
+                variant="outlined"
+                onClick={() => (window.location.href = "/")}
+              >
+                Cancel
+              </Button>,
               <Button variant="outlined" onClick={() => {}}>
                 Save Draft
               </Button>,
