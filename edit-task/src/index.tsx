@@ -1,8 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import EditTask from "./EditTask";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { orange } from "@mui/material/colors";
-import CreateTask from "./components/steps/CreateTask";
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -20,24 +20,20 @@ declare module "@mui/material/styles" {
 
 const theme = createTheme({
   palette: {
+    mode: "dark",
     primary: {
       light: "rgb(38, 97, 246)",
       main: "rgb(38, 97, 246)",
       dark: "rgb(38, 97, 246)",
     },
-  },
-  status: {
-    danger: orange[500],
-  },
-  components: {
-    MuiButton: {
-      styleOverrides: {
-        // Name of the slot
-        root: {
-          borderRadius: "32px",
-          padding: "6px 20px",
-        },
-      },
+    background: {
+      default: "rgb(32, 35, 39)",
+      paper: "rgb(32, 35, 39)",
+    },
+    info: {
+      light: "#ccc",
+      main: "#ccc",
+      dark: "#ccc",
     },
   },
 });
@@ -48,7 +44,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-      <CreateTask />
+      <EditTask />
     </ThemeProvider>
   </React.StrictMode>
 );

@@ -22,7 +22,14 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      <Box sx={{ display: value === index ? "block" : "none" }}>
+      <Box
+        sx={{
+          display: value === index ? "block" : "none",
+          position: "relative",
+          height: "calc(100vh - 54px)",
+          overflow: "hidden",
+        }}
+      >
         <Typography>{children}</Typography>
       </Box>
     </div>
@@ -52,7 +59,7 @@ export default function BasicTabs({ tabItems, actions }: OwnProps) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", bgcolor: "background.default" }}>
       <Stack
         sx={{ borderBottom: 1, borderColor: "divider" }}
         direction="row"
@@ -64,7 +71,12 @@ export default function BasicTabs({ tabItems, actions }: OwnProps) {
           aria-label="basic tabs example"
         >
           {tabItems.map((t, i) => (
-            <Tab label={t.label} {...a11yProps(i)} />
+            <Tab
+              label={t.label}
+              {...a11yProps(i)}
+              color="info"
+              sx={{ color: "info.main" }}
+            />
           ))}
         </Tabs>
         <Box sx={{ p: 1 }}>
