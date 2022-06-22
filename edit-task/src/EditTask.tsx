@@ -40,6 +40,7 @@ const getLoggedInUserRecordID = () =>
 const updateTaskInAirtable = async (
   task: any,
   projectContents: string,
+  projectDependencies: string,
   isDraft: boolean
 ): Promise<any> =>
   new Promise((resolve, reject) => {
@@ -50,6 +51,7 @@ const updateTaskInAirtable = async (
           fields: {
             Name: task["Name"],
             Contents: projectContents,
+            Dependencies: projectDependencies,
             IsDraft: `${isDraft}`,
           },
         },
@@ -103,10 +105,14 @@ const EditTask = () => {
       const projectContents = await (
         window as any
       ).stackblitzVM.getFsSnapshot();
+      const projectDependencies = await (
+        window as any
+      ).stackblitzVM.getDependencies();
 
       await updateTaskInAirtable(
         task[0],
         JSON.stringify(projectContents, null, 2),
+        JSON.stringify(projectDependencies, null, 2),
         isDraft
       );
 

@@ -17,6 +17,7 @@ export default function Editor({ task }: OwnProps) {
             title: task[0]["Name"],
             description: "",
             template: "create-react-app",
+            dependencies: JSON.parse(task[0]["Dependencies"]),
           },
           {
             openFile: Object.keys(JSON.parse(task[0]["Contents"]))[0],
