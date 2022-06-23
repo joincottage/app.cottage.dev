@@ -4,6 +4,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Modal from "@mui/material/Modal";
 import Backdrop from "@mui/material/Backdrop";
+import CloseIcon from "@mui/icons-material/Close";
 import {
   Checkbox,
   Divider,
@@ -13,16 +14,34 @@ import {
   FormHelperText,
   FormLabel,
   Slide,
+  Tooltip,
 } from "@mui/material";
 
 interface OwnProps {
   task: any;
 }
 
+const TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS = 10000;
+
 export default function OverviewModalButton({ task }: OwnProps) {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+
+    if (!hasSeenTooltip) {
+      setShowTooltip(true);
+      setHasSeenTooltip(true);
+
+      setTimeout(
+        () => setShowTooltip(false),
+        TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS
+      );
+    }
+  };
+
+  const [showTooltip, setShowTooltip] = useState(false);
+  const [hasSeenTooltip, setHasSeenTooltip] = useState(false);
 
   const [checked, setChecked] = useState([]);
 
@@ -33,9 +52,32 @@ export default function OverviewModalButton({ task }: OwnProps) {
 
   return (
     <div>
-      <Button variant="contained" onClick={handleOpen}>
-        Show Task Overview
-      </Button>
+      <Tooltip
+        title={
+          <Box sx={{ display: "relative" }}>
+            <Typography variant="body1" sx={{ p: 1, textAlign: "center" }}>
+              Just click here to view the task overview again!
+            </Typography>
+            <CloseIcon
+              fontSize="small"
+              sx={{
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+                cursor: "pointer",
+              }}
+              onClick={() => setShowTooltip(false)}
+            />
+          </Box>
+        }
+        placement="bottom-end"
+        arrow
+        open={showTooltip}
+      >
+        <Button variant="contained" onClick={handleOpen}>
+          Show Task Overview
+        </Button>
+      </Tooltip>
       <Modal
         open={open}
         onClose={handleClose}
