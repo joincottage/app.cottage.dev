@@ -35,6 +35,10 @@ const theme = createTheme({
       main: "#ccc",
       dark: "#ccc",
     },
+    text: {
+      primary: "#ccc",
+      secondary: '#ccc'
+    },
   },
 });
 

@@ -20,6 +20,7 @@ import { Helmet } from "react-helmet";
 import BasicTabs from "./components/BasicTabs";
 import Editor from "./components/Editor";
 import Overview from "./components/Overview";
+import OverviewModalButton from "./components/OverviewModalButton";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -156,12 +157,9 @@ const TaskDetails = () => {
                 label: "Editor",
                 content: <Editor task={params.recordId ? task : null} />,
               },
-              {
-                label: "Overview",
-                content: <Overview task={params.recordId ? task : null} />,
-              },
             ]}
-            actions={[
+            leftActions={[<OverviewModalButton task={task[0]} />]}
+            rightActions={[
               <Button
                 variant="text"
                 color="info"
