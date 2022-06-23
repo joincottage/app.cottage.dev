@@ -13,9 +13,13 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
+  Grid,
   Slide,
+  Stack,
   Tooltip,
 } from "@mui/material";
+import Zoom from "react-medium-image-zoom";
+import "react-medium-image-zoom/dist/styles.css";
 
 interface OwnProps {
   task: any;
@@ -109,40 +113,68 @@ export default function OverviewModalButton({ task }: OwnProps) {
               p: 4,
             }}
           >
-            <Typography variant="h6" sx={{ color: "text.primary" }}>
-              Description
-            </Typography>
-            <Typography variant="body1" sx={{ color: "text.primary", mt: 2 }}>
-              {task.Description}
-            </Typography>
-            <Divider sx={{ mt: 2, mb: 2 }} />
-            <Typography variant="h6" sx={{ color: "text.primary" }}>
-              Acceptance Criteria
-            </Typography>
-            <FormControl component="fieldset" variant="standard" sx={{ mt: 1 }}>
-              <FormGroup>
-                {acceptanceCriteria.map(
-                  (a) =>
-                    a && (
-                      <FormControlLabel
-                        control={
-                          <Checkbox
-                            checked={checked.includes(a)}
-                            onChange={() =>
-                              checked.includes(a)
-                                ? setChecked(checked.filter((c) => c !== a))
-                                : setChecked([...checked, a])
-                            }
-                            name={a}
-                          />
-                        }
-                        label={a}
-                        sx={{ color: "text.primary" }}
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <Typography variant="h6" sx={{ color: "text.primary" }}>
+                  UX Design Images
+                </Typography>
+                <Stack sx={{ mt: 2 }}>
+                  {task["UX Design Images"].map((u: any) => (
+                    <Zoom>
+                      <img
+                        alt={u.filename as string}
+                        src={u.url}
+                        width="375"
+                        style={{ borderRadius: "0.5rem" }}
                       />
-                    )
-                )}
-              </FormGroup>
-            </FormControl>
+                    </Zoom>
+                  ))}
+                </Stack>
+              </Grid>
+              <Grid item xs={6}>
+                <Typography variant="h6" sx={{ color: "text.primary" }}>
+                  Description
+                </Typography>
+                <Typography
+                  variant="body1"
+                  sx={{ color: "text.primary", mt: 2 }}
+                >
+                  {task.Description}
+                </Typography>
+                <Divider sx={{ mt: 2, mb: 2 }} />
+                <Typography variant="h6" sx={{ color: "text.primary" }}>
+                  Acceptance Criteria
+                </Typography>
+                <FormControl
+                  component="fieldset"
+                  variant="standard"
+                  sx={{ mt: 1 }}
+                >
+                  <FormGroup>
+                    {acceptanceCriteria.map(
+                      (a) =>
+                        a && (
+                          <FormControlLabel
+                            control={
+                              <Checkbox
+                                checked={checked.includes(a)}
+                                onChange={() =>
+                                  checked.includes(a)
+                                    ? setChecked(checked.filter((c) => c !== a))
+                                    : setChecked([...checked, a])
+                                }
+                                name={a}
+                              />
+                            }
+                            label={a}
+                            sx={{ color: "text.primary" }}
+                          />
+                        )
+                    )}
+                  </FormGroup>
+                </FormControl>
+              </Grid>
+            </Grid>
           </Box>
         </Slide>
       </Modal>
