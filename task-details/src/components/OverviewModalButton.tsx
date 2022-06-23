@@ -30,13 +30,15 @@ export default function OverviewModalButton({ task }: OwnProps) {
     setOpen(false);
 
     if (!hasSeenTooltip) {
-      setShowTooltip(true);
-      setHasSeenTooltip(true);
+      setTimeout(() => {
+        setShowTooltip(true);
+        setHasSeenTooltip(true);
 
-      setTimeout(
-        () => setShowTooltip(false),
-        TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS
-      );
+        setTimeout(
+          () => setShowTooltip(false),
+          TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS
+        );
+      }, 200);
     }
   };
 
