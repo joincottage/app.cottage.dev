@@ -120,7 +120,6 @@ export default function OverviewModalButton({ task }: OwnProps) {
           <Box
             sx={{
               position: "absolute" as "absolute",
-              top: "50%",
               margin: "auto",
               width: "800px",
               bgcolor: "background.paper",
@@ -130,7 +129,10 @@ export default function OverviewModalButton({ task }: OwnProps) {
             }}
           >
             <Stack direction="row-reverse">
-              <Box onClick={handleClose} sx={{ cursor: "pointer" }}>
+              <Box
+                onClick={handleClose}
+                sx={{ cursor: "pointer", p: 2, mt: -2, mr: -2 }}
+              >
                 <CloseIcon sx={{ color: "text.primary" }} />
               </Box>
             </Stack>
