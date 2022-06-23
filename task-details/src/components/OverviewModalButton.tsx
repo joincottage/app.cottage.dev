@@ -20,16 +20,25 @@ import {
 } from "@mui/material";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 interface OwnProps {
   task: any;
 }
 
 const TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS = 10000;
+const TASK_OVERVIEW_DETAIL_PAGE_BASE_URL =
+  "https://app.cottage.dev/task-overview";
 
 export default function OverviewModalButton({ task }: OwnProps) {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  const [open, setOpen] = useState(true);
+  const handleOpen = () => {
+    setOpen(true);
+
+    if (hasSeenTooltip) {
+      setShowTooltip(false);
+    }
+  };
   const handleClose = () => {
     setOpen(false);
 
@@ -44,6 +53,13 @@ export default function OverviewModalButton({ task }: OwnProps) {
         );
       }, 200);
     }
+  };
+  const handleOpenNewTab = () => {
+    window.open(
+      `${TASK_OVERVIEW_DETAIL_PAGE_BASE_URL}?recordId=${task["Record ID"]}`,
+      "_blank"
+    );
+    handleClose();
   };
 
   const [showTooltip, setShowTooltip] = useState(false);
@@ -113,6 +129,11 @@ export default function OverviewModalButton({ task }: OwnProps) {
               p: 4,
             }}
           >
+            <Stack direction="row-reverse">
+              <Box onClick={handleClose} sx={{ cursor: "pointer" }}>
+                <CloseIcon sx={{ color: "text.primary" }} />
+              </Box>
+            </Stack>
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
@@ -124,7 +145,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                       <img
                         alt={u.filename as string}
                         src={u.url}
-                        width="375"
+                        width="350"
                         style={{ borderRadius: "0.5rem" }}
                       />
                     </Zoom>
@@ -175,6 +196,11 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 </FormControl>
               </Grid>
             </Grid>
+            <Stack direction="row-reverse">
+              <Button variant="text" color="info" onClick={handleOpenNewTab}>
+                Open in new tab <OpenInNewIcon sx={{ ml: 1 }} />
+              </Button>
+            </Stack>
           </Box>
         </Slide>
       </Modal>
