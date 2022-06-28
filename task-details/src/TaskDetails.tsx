@@ -131,7 +131,7 @@ const TaskDetails = () => {
             competition.
           </Typography>
           <Typography variant="h6" gutterBottom>
-            Try visiting this page on a device with a bigger screen.
+            Try visiting this page on a desktop computer.
           </Typography>
           <Divider />
           <Box sx={{ mt: 3, mb: 1 }}>
