@@ -125,16 +125,16 @@ const TaskDetails = () => {
         <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
           <Typography variant="h4">Aw shucks, fam.</Typography>
         </Box>
-        <Box sx={{ pl: 3, pr: 3 }}>
+        <Box sx={{ pl: 1, pr: 1 }}>
           <Typography variant="h6" gutterBottom>
             Your screen is too small for us to display the workspace for this
             competition.
           </Typography>
           <Typography variant="h6" gutterBottom>
-            Try visiting this page on a desktop computer.
+            Try visiting this page on a laptop or desktop computer.
           </Typography>
           <Divider />
-          <Box sx={{ mt: 3, mb: 1 }}>
+          <Box sx={{ mt: 1, mb: 1 }}>
             <Typography variant="caption" gutterBottom>
               In the meantime, here is a cat trying to fit into a small box.
             </Typography>
