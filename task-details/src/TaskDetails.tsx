@@ -1,12 +1,9 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import { Button, Container, Grid, Stack, Typography } from "@mui/material";
+import React, { useMemo, useReducer, useState } from "react";
+import { Box, Container, Divider, Typography } from "@mui/material";
 import useAirtable from "./hooks/useAirtable";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Airtable from "airtable";
-import SaveIcon from "@mui/icons-material/Save";
-import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
-import LoadingButton from "@mui/lab/LoadingButton";
 import {
   AppAction,
   AppContext,
@@ -17,10 +14,9 @@ import {
 import { SET_SELECTED_TASKS } from "./actions/setSelectedTasks";
 // @ts-ignore
 import { Helmet } from "react-helmet";
-import BasicTabs from "./components/BasicTabs";
 import Editor from "./components/Editor";
-import Overview from "./components/Overview";
-import OverviewModalButton from "./components/OverviewModalButton";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import ImageFadeIn from "react-image-fade-in";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -80,6 +76,8 @@ const params: Record<string, any> = new Proxy(
 
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
+  const isScreenTooSmall = useMediaQuery("(max-width:600px)");
+
   const {
     data: task,
     error: taskError,
@@ -121,6 +119,39 @@ const TaskDetails = () => {
     submitForm();
   };
 
+  if (isScreenTooSmall) {
+    return (
+      <Container maxWidth="sm">
+        <Box sx={{ p: 3, display: "flex", justifyContent: "center" }}>
+          <Typography variant="h4">Aw shucks, fam.</Typography>
+        </Box>
+        <Box sx={{ pl: 3, pr: 3 }}>
+          <Typography variant="h6" gutterBottom>
+            Your screen is too small for us to display the workspace for this
+            competition.
+          </Typography>
+          <Typography variant="h6" gutterBottom>
+            Try visiting this page on a device with a bigger screen.
+          </Typography>
+          <Divider />
+          <Box sx={{ mt: 3, mb: 1 }}>
+            <Typography variant="caption" gutterBottom>
+              In the meantime, here is a cat trying to fit into a small box.
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ display: "flex", justifyContent: "center" }}>
+          <ImageFadeIn
+            height={300}
+            src={
+              "https://storage.googleapis.com/cottage-assets/cat-in-box-with-lid.webp"
+            }
+          />
+        </Box>
+      </Container>
+    );
+  }
+
   return taskLoading ? null : (
     <AppDataContext.Provider value={contextValue}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -151,41 +182,7 @@ const TaskDetails = () => {
             bottom: 0,
           }}
         >
-          <BasicTabs
-            tabItems={[
-              {
-                label: "Editor",
-                content: <Editor task={params.recordId ? task : null} />,
-              },
-            ]}
-            leftActions={[<OverviewModalButton task={task[0]} />]}
-            rightActions={[
-              <Button
-                variant="text"
-                color="info"
-                onClick={() => (window.location.href = "/")}
-              >
-                Cancel
-              </Button>,
-              <LoadingButton
-                loading={formIsSubmitting}
-                variant="outlined"
-                color="info"
-                onClick={onSubmit.bind(null, true)}
-              >
-                <SaveIcon sx={{ mr: 1 }} />
-                Save Draft
-              </LoadingButton>,
-              <LoadingButton
-                loading={false}
-                variant="contained"
-                onClick={onSubmit.bind(null, false)}
-              >
-                <RocketLaunchIcon sx={{ mr: 1 }} />
-                SUBMIT SOLUTION
-              </LoadingButton>,
-            ]}
-          />
+          <Editor task={params.recordId ? task : null} />
         </Container>
       </LocalizationProvider>
     </AppDataContext.Provider>

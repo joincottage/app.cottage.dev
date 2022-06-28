@@ -29,7 +29,7 @@ export default function Editor({ task }: OwnProps) {
     async function initializeDefaultEditor() {
       const vm = ((window as any).stackblitzVM =
         await StackblitzSDK.embedProjectId("editor", "react-ts-bwmw61", {
-          height: window.innerHeight - 30,
+          height: window.innerHeight,
         }));
     }
 
@@ -48,7 +48,7 @@ export default function Editor({ task }: OwnProps) {
         overflow: "hidden",
       }}
     >
-      <div style={{ position: "relative", top: "-40px", overflow: "hidden" }}>
+      <div style={{ position: "relative", overflow: "hidden" }}>
         <div id="editor"></div>
       </div>
     </Box>
