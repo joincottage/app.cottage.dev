@@ -1,8 +1,9 @@
 import React, { useMemo, useReducer, useState } from "react";
-import { Box, Container, Divider, Typography } from "@mui/material";
+import { Box, Button, Container, Divider, Typography } from "@mui/material";
 import useAirtable from "./hooks/useAirtable";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import SaveIcon from "@mui/icons-material/Save";
 import Airtable from "airtable";
 import {
   AppAction,
@@ -16,7 +17,12 @@ import { SET_SELECTED_TASKS } from "./actions/setSelectedTasks";
 import { Helmet } from "react-helmet";
 import Editor from "./components/Editor";
 import useMediaQuery from "@mui/material/useMediaQuery";
+// @ts-ignore
 import ImageFadeIn from "react-image-fade-in";
+import OverviewModalButton from "./components/OverviewModalButton";
+import BasicTabs from "./components/BasicTabs";
+import LoadingButton from "@mui/lab/LoadingButton";
+import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -73,6 +79,8 @@ const params: Record<string, any> = new Proxy(
     get: (searchParams, prop) => searchParams.get(prop as string),
   }
 );
+
+const actions = [{ icon: <SaveIcon />, name: "Save", onClick: () => {} }];
 
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
@@ -189,7 +197,41 @@ const TaskDetails = () => {
             bottom: 0,
           }}
         >
-          <Editor task={params.recordId ? task : null} />
+          <BasicTabs
+            tabItems={[
+              {
+                label: "Editor",
+                content: <Editor task={params.recordId ? task : null} />,
+              },
+            ]}
+            leftActions={[<OverviewModalButton task={task[0]} />]}
+            rightActions={[
+              <Button
+                variant="text"
+                color="info"
+                onClick={() => (window.location.href = "/")}
+              >
+                Cancel
+              </Button>,
+              <LoadingButton
+                loading={formIsSubmitting}
+                variant="outlined"
+                color="info"
+                onClick={onSubmit.bind(null, true)}
+              >
+                <SaveIcon sx={{ mr: 1 }} />
+                Save Draft
+              </LoadingButton>,
+              <LoadingButton
+                loading={false}
+                variant="contained"
+                onClick={onSubmit.bind(null, false)}
+              >
+                <RocketLaunchIcon sx={{ mr: 1 }} />
+                SUBMIT SOLUTION
+              </LoadingButton>,
+            ]}
+          />
         </Container>
       </LocalizationProvider>
     </AppDataContext.Provider>

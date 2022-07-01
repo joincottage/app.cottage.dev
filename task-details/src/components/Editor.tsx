@@ -21,7 +21,8 @@ export default function Editor({ task }: OwnProps) {
           },
           {
             openFile: Object.keys(JSON.parse(task[0]["Contents"]))[1],
-            height: window.innerHeight - 70,
+            height: window.innerHeight,
+            forceEmbedLayout: true,
           }
         ));
     }
