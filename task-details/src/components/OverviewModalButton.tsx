@@ -139,20 +139,25 @@ export default function OverviewModalButton({ task }: OwnProps) {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
-                  UX Design Images
+                  Figma Design Preview
                 </Typography>
                 <Stack sx={{ mt: 2 }}>
-                  {task["UX Design Images"].map((u: any) => (
-                    <Zoom>
-                      <img
-                        alt={u.filename as string}
-                        src={u.url}
-                        width="350"
-                        style={{ borderRadius: "0.5rem" }}
-                      />
-                    </Zoom>
-                  ))}
+                  <iframe
+                    src={task["Figma Embed"]}
+                    width="350"
+                    height="350"
+                    allowFullScreen
+                  />
                 </Stack>
+                <Button
+                  variant="contained"
+                  sx={{ color: "text.primary", mt: 3, width: "350px" }}
+                  onClick={() =>
+                    window.open(task["Figma Direct Link"], "_blank")
+                  }
+                >
+                  Open Interactive Figma Design
+                </Button>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
