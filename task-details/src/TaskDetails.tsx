@@ -1,4 +1,4 @@
-import React, { useMemo, useReducer, useState } from "react";
+import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { Box, Button, Container, Divider, Typography } from "@mui/material";
 import useAirtable from "./hooks/useAirtable";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -23,6 +23,7 @@ import OverviewModalButton from "./components/OverviewModalButton";
 import BasicTabs from "./components/BasicTabs";
 import LoadingButton from "@mui/lab/LoadingButton";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
+import ConfirmationModal from "./components/ConfirmationModal";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -85,7 +86,6 @@ const actions = [{ icon: <SaveIcon />, name: "Save", onClick: () => {} }];
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
   const isScreenTooSmall = useMediaQuery("(max-width:600px)");
-
   const {
     data: task,
     error: taskError,
@@ -94,8 +94,10 @@ const TaskDetails = () => {
     tableName: "Tasks",
     filterByFormula: `{Record ID} = '${params.recordId}'`,
   });
-
-  const [formIsSubmitting, setFormIsSubmitting] = useState(false);
+  const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
+  const [solutionIsBeingSubmitted, setSolutionIsBeingSubmitted] =
+    useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
 
   // @ts-ignore
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -103,9 +105,9 @@ const TaskDetails = () => {
     return { state, dispatch };
   }, [state, dispatch]) as AppContext;
 
-  const onSubmit = (isDraft: boolean) => {
-    async function submitForm() {
-      setFormIsSubmitting(true);
+  const onSaveDraft = () => {
+    async function saveDraft() {
+      setDraftIsBeingSaved(true);
 
       const projectContents = await (
         window as any
@@ -114,18 +116,56 @@ const TaskDetails = () => {
       await updateTaskInAirtable(
         task[0],
         JSON.stringify(projectContents, null, 2),
-        isDraft
+        true
       );
 
-      setFormIsSubmitting(false);
-
-      if (!isDraft) {
-        window.location.href = "/";
-      }
+      // It's a bit jarring to see the loading spinner flash so quickly
+      setTimeout(() => {
+        setDraftIsBeingSaved(false);
+      }, 2000);
     }
 
-    submitForm();
+    saveDraft();
   };
+
+  const onSubmitSolution = async () => {
+    setSolutionIsBeingSubmitted(true);
+
+    const projectContents = await (window as any).stackblitzVM.getFsSnapshot();
+
+    await updateTaskInAirtable(
+      task[0],
+      JSON.stringify(projectContents, null, 2),
+      false
+    );
+
+    // It's a bit jarring to see the loading spinner flash so quickly
+    await new Promise<void>((resolve) =>
+      setTimeout(() => {
+        setSolutionIsBeingSubmitted(false);
+        resolve();
+      }, 2000)
+    );
+  };
+
+  const SAVE_DRAFT_INTERVAL_MILLIS = 60000;
+  useEffect(() => {
+    let intervalId: NodeJS.Timer;
+
+    // I think the "task" variable gets captured in a closure when we
+    // instantiate the setTimeout, thus making it "undefined" for all future
+    // invocations. We fix this by only instantiating the setTimeout when
+    // "task" is defined.
+    if (task) {
+      setTimeout(() => {
+        intervalId = setInterval(() => {
+          console.log("Saving draft...");
+          onSaveDraft();
+        }, SAVE_DRAFT_INTERVAL_MILLIS);
+      }, SAVE_DRAFT_INTERVAL_MILLIS);
+    }
+    return () => clearInterval(intervalId);
+  }, [task]);
 
   if (isScreenTooSmall) {
     return (
@@ -214,10 +254,10 @@ const TaskDetails = () => {
                 Cancel
               </Button>,
               <LoadingButton
-                loading={formIsSubmitting}
+                loading={draftIsBeingSaved}
                 variant="outlined"
                 color="info"
-                onClick={onSubmit.bind(null, true)}
+                onClick={onSaveDraft}
               >
                 <SaveIcon sx={{ mr: 1 }} />
                 Save Draft
@@ -225,12 +265,18 @@ const TaskDetails = () => {
               <LoadingButton
                 loading={false}
                 variant="contained"
-                onClick={onSubmit.bind(null, false)}
+                onClick={() => setShowConfirmationModal(true)}
               >
                 <RocketLaunchIcon sx={{ mr: 1 }} />
                 SUBMIT SOLUTION
               </LoadingButton>,
             ]}
+          />
+          <ConfirmationModal
+            showModal={showConfirmationModal}
+            onConfirm={onSubmitSolution}
+            loading={solutionIsBeingSubmitted}
+            onClose={() => setShowConfirmationModal(false)}
           />
         </Container>
       </LocalizationProvider>
