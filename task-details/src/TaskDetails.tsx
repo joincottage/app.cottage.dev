@@ -208,6 +208,29 @@ const TaskDetails = () => {
     return () => clearInterval(intervalId);
   }, [task]);
 
+  if (
+    submission &&
+    submission.length > 0 &&
+    submission[0].IsDraft === "false"
+  ) {
+    return (
+      <Container maxWidth="sm" sx={{ mt: 3 }}>
+        <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
+          <Typography variant="h4">We respect the hustle</Typography>
+        </Box>
+        <Box sx={{ pl: 1, pr: 1 }}>
+          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+            ...but you've already submitted a solution for this competition.
+          </Typography>
+          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+            Head back to the home page and get started on a competition that you
+            haven't tried yet!
+          </Typography>
+        </Box>
+      </Container>
+    );
+  }
+
   if (isScreenTooSmall) {
     return (
       <Container maxWidth="sm" sx={{ mt: 3 }}>
