@@ -24,6 +24,7 @@ import BasicTabs from "./components/BasicTabs";
 import LoadingButton from "@mui/lab/LoadingButton";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ConfirmationModal from "./components/ConfirmationModal";
+import useInterval from "./hooks/useInterval";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -143,7 +144,8 @@ const TaskDetails = () => {
         window as any
       ).stackblitzVM.getFsSnapshot();
 
-      const submissionToSave = submission[0] || newlyCreatedSubmission;
+      const submissionToSave =
+        (submission && submission[0]) || newlyCreatedSubmission;
       if (submissionToSave) {
         await updateSubmissionInAirtable(
           submissionToSave,
@@ -190,23 +192,9 @@ const TaskDetails = () => {
   };
 
   const SAVE_DRAFT_INTERVAL_MILLIS = 60000;
-  useEffect(() => {
-    let intervalId: NodeJS.Timer;
-
-    // I think the "task" variable gets captured in a closure when we
-    // instantiate the setTimeout, thus making it "undefined" for all future
-    // invocations. We fix this by only instantiating the setTimeout when
-    // "task" is defined.
-    if (task) {
-      setTimeout(() => {
-        intervalId = setInterval(() => {
-          console.log("Saving draft...");
-          onSaveDraft();
-        }, SAVE_DRAFT_INTERVAL_MILLIS);
-      }, SAVE_DRAFT_INTERVAL_MILLIS);
-    }
-    return () => clearInterval(intervalId);
-  }, [task]);
+  useInterval(() => {
+    onSaveDraft();
+  }, SAVE_DRAFT_INTERVAL_MILLIS);
 
   if (
     submission &&
