@@ -4,16 +4,21 @@ import { Box } from "@mui/material";
 
 interface OwnProps {
   task?: any[];
+  submission?: any[];
 }
 
-export default function Editor({ task }: OwnProps) {
+export default function Editor({ task, submission }: OwnProps) {
+  const contents =
+    submission && submission.length > 0
+      ? JSON.parse(submission[0]["Contents"])
+      : JSON.parse(task[0]["Contents"]);
   useEffect(() => {
     async function initializeEditorWithContent() {
       const vm = ((window as any).stackblitzVM =
         await StackblitzSDK.embedProject(
           "editor",
           {
-            files: JSON.parse(task[0]["Contents"]),
+            files: contents,
             title: task[0]["Name"],
             description: "",
             template: "create-react-app",

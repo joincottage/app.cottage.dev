@@ -41,18 +41,47 @@ function appReducer(state: AppState, action: AppAction) {
 const getLoggedInUserRecordID = () =>
   (window as any)?.logged_in_user?.airtable_record_id || "rec42IZUiZSfnHZvO";
 
-const updateTaskInAirtable = async (
+const updateSubmissionInAirtable = async (
+  submission: any,
+  projectContents: string,
+  isDraft: boolean
+): Promise<any> =>
+  new Promise((resolve, reject) => {
+    base("Submissions").update(
+      [
+        {
+          id: submission["Record ID"],
+          fields: {
+            Contents: projectContents,
+            IsDraft: `${isDraft}`,
+          },
+        },
+      ],
+      function (err: any, records: any) {
+        if (err) {
+          console.error(err);
+          reject(err);
+          return;
+        }
+        resolve(records[0].fields);
+      }
+    );
+  });
+
+const createSubmissionInAirtable = async (
   task: any,
   projectContents: string,
   isDraft: boolean
 ): Promise<any> =>
   new Promise((resolve, reject) => {
-    base("Tasks").update(
+    base("Submissions").create(
       [
         {
-          id: params.recordId,
           fields: {
             Name: task["Name"],
+            Status: "Awaiting Review",
+            Users: [getLoggedInUserRecordID()],
+            Tasks: [task["Record ID"]],
             Contents: projectContents,
             IsDraft: `${isDraft}`,
           },
@@ -81,23 +110,24 @@ const params: Record<string, any> = new Proxy(
   }
 );
 
-const actions = [{ icon: <SaveIcon />, name: "Save", onClick: () => {} }];
-
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
   const isScreenTooSmall = useMediaQuery("(max-width:600px)");
-  const {
-    data: task,
-    error: taskError,
-    loading: taskLoading,
-  } = useAirtable({
+  const { data: task, loading: taskLoading } = useAirtable({
     tableName: "Tasks",
     filterByFormula: `{Record ID} = '${params.recordId}'`,
+  });
+  const { data: submission } = useAirtable({
+    tableName: "Submissions",
+    filterByFormula: `AND({Record ID (from Users)} = '${getLoggedInUserRecordID()}', {Record ID (from Tasks)} = '${
+      params.recordId
+    }')`,
   });
   const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
   const [solutionIsBeingSubmitted, setSolutionIsBeingSubmitted] =
     useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [newlyCreatedSubmission, setNewlyCreatedSubmission] = useState(null);
 
   // @ts-ignore
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -113,11 +143,21 @@ const TaskDetails = () => {
         window as any
       ).stackblitzVM.getFsSnapshot();
 
-      await updateTaskInAirtable(
-        task[0],
-        JSON.stringify(projectContents, null, 2),
-        true
-      );
+      const submissionToSave = submission[0] || newlyCreatedSubmission;
+      if (submissionToSave) {
+        await updateSubmissionInAirtable(
+          submissionToSave,
+          JSON.stringify(projectContents, null, 2),
+          true
+        );
+      } else {
+        const response = await createSubmissionInAirtable(
+          task[0],
+          JSON.stringify(projectContents, null, 2),
+          true
+        );
+        setNewlyCreatedSubmission(response);
+      }
 
       // It's a bit jarring to see the loading spinner flash so quickly
       setTimeout(() => {
@@ -133,8 +173,9 @@ const TaskDetails = () => {
 
     const projectContents = await (window as any).stackblitzVM.getFsSnapshot();
 
-    await updateTaskInAirtable(
-      task[0],
+    const submissionToSubmit = submission[0] || newlyCreatedSubmission;
+    await updateSubmissionInAirtable(
+      submissionToSubmit,
       JSON.stringify(projectContents, null, 2),
       false
     );
@@ -241,7 +282,12 @@ const TaskDetails = () => {
             tabItems={[
               {
                 label: "Editor",
-                content: <Editor task={params.recordId ? task : null} />,
+                content: (
+                  <Editor
+                    task={params.recordId ? task : null}
+                    submission={submission}
+                  />
+                ),
               },
             ]}
             leftActions={[<OverviewModalButton task={task[0]} />]}

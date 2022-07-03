@@ -10,6 +10,7 @@ import { Helmet } from "react-helmet";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import {
+  Button,
   Checkbox,
   Container,
   Divider,
@@ -116,20 +117,25 @@ const TaskOverview = () => {
             <Grid container spacing={2}>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
-                  UX Design Images
+                  Figma Design Preview
                 </Typography>
                 <Stack sx={{ mt: 2 }}>
-                  {task[0]["UX Design Images"].map((u: any) => (
-                    <Zoom>
-                      <img
-                        alt={u.filename as string}
-                        src={u.url}
-                        width="375"
-                        style={{ borderRadius: "0.5rem" }}
-                      />
-                    </Zoom>
-                  ))}
+                  <iframe
+                    src={task["Figma Embed"]}
+                    width="350"
+                    height="350"
+                    allowFullScreen
+                  />
                 </Stack>
+                <Button
+                  variant="contained"
+                  sx={{ color: "text.primary", mt: 3, width: "350px" }}
+                  onClick={() =>
+                    window.open(task["Figma Direct Link"], "_blank")
+                  }
+                >
+                  Open Interactive Figma Design
+                </Button>
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
