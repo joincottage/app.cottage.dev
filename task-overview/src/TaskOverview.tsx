@@ -84,6 +84,7 @@ const TaskOverview = () => {
             p: 4,
             display: "flex",
             justifyContent: "center",
+            minHeight: "100vh",
           }}
         >
           <Container maxWidth="lg">
