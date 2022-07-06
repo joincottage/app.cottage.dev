@@ -52,7 +52,7 @@ async function handler(
           if (err) {
             console.error(err);
             res.status(500).send("Error creating records");
-            return;
+            throw err;
           }
           res.json(records[0].fields);
         }
@@ -78,7 +78,7 @@ async function handler(
           if (err) {
             console.error(err);
             res.status(500).send("Error updating submission");
-            return;
+            throw err;
           }
           res.json(records[0].fields);
         }
