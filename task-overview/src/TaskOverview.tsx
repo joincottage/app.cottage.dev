@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import useAirtable from "./hooks/useAirtable";
+import useTask from "./hooks/useTask";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import Airtable from "airtable";
@@ -20,29 +20,7 @@ import {
   Grid,
   Stack,
 } from "@mui/material";
-import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
-
-function appReducer(state: AppState, action: AppAction) {
-  switch (action.type) {
-    case SET_SELECTED_TASKS:
-      return {
-        ...state,
-        selectedTasks: action.payload.selectedTasks,
-      };
-    default:
-      // TODO: report unknown action types as an error
-      throw new Error(`Unrecognized action: ${action.type}`);
-  }
-}
-
-const getLoggedInUserRecordID = () =>
-  (window as any)?.logged_in_user?.airtable_record_id;
-
-// FIXME: Move behind API to hide Airtable API key
-const base = new Airtable({ apiKey: "keyk0tDEC8slUu1HI" }).base(
-  "appk7ctplKKCsOhWQ"
-);
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -53,13 +31,8 @@ const params: Record<string, any> = new Proxy(
 
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskOverview = () => {
-  const {
-    data: task,
-    error: taskError,
-    loading: taskLoading,
-  } = useAirtable({
-    tableName: "Tasks",
-    filterByFormula: `{Record ID} = '${params.recordId}'`,
+  const { data: task, loading: taskLoading } = useTask({
+    recordId: params.recordId,
   });
 
   const [checked, setChecked] = useState([]);
@@ -121,7 +94,7 @@ const TaskOverview = () => {
                 </Typography>
                 <Stack sx={{ mt: 2 }}>
                   <iframe
-                    src={task["Figma Embed"]}
+                    src={task[0]["Figma Embed"]}
                     width="350"
                     height="350"
                     allowFullScreen
@@ -131,7 +104,7 @@ const TaskOverview = () => {
                   variant="contained"
                   sx={{ color: "text.primary", mt: 3, width: "350px" }}
                   onClick={() =>
-                    window.open(task["Figma Direct Link"], "_blank")
+                    window.open(task[0]["Figma Direct Link"], "_blank")
                   }
                 >
                   Open Interactive Figma Design
