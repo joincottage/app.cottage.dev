@@ -13,11 +13,11 @@ async function handler(
 ): Promise<void> {
   await runMiddleware(req, res, cors(corsOptions));
 
-  const isValidUser = await validateUser(req.query.jwtToken as string);
-  if (!isValidUser) {
-    res.status(401).send("Unauthorized");
-    return;
-  }
+  // const isValidUser = await validateUser(req.query.jwtToken as string);
+  // if (!isValidUser) {
+  //   res.status(401).send("Unauthorized");
+  //   return;
+  // }
 
   switch (req.method) {
     case "GET": {

@@ -13,43 +13,50 @@ async function handler(
 ): Promise<void> {
   await runMiddleware(req, res, cors(corsOptions));
 
-  const isValidUser = await validateUser(req.query.jwtToken as string);
-  if (!isValidUser) {
-    res.status(401).send("Unauthorized");
-    return;
-  }
+  // const isValidUser = await validateUser(req.query.jwtToken as string);
+  // if (!isValidUser) {
+  //   res.status(401).send("Unauthorized");
+  //   return;
+  // }
 
   switch (req.method) {
     case "GET": {
-      if (!req.query.loggedInUserRecordID) {
+      if (!req.query.recordId) {
         res.status(400).send("Bad Request");
         return;
       }
 
-      const { data: tasks } = await getDataFromAirtable({
-        tableName: "Task Instances",
-        filterByFormula: `{Record ID (from Travel Agent)}="${req.query.loggedInUserRecordID}"`,
+      const { data: submission } = await getDataFromAirtable({
+        tableName: "Tasks",
+        filterByFormula: `{Record ID} = '${req.query.recordId}'`,
       });
 
-      res.json(tasks);
+      res.json(submission);
 
       break;
     }
     case "POST": {
-      const tasks = req.body.tasks;
-      if (!tasks) {
+      const fields = req.body.fields;
+      if (!fields) {
         res.status(400).send("Bad Request");
         return;
       }
 
-      base("Task Instances").create(tasks, function (err: any, records: any) {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error creating records");
-          return;
+      base("Tasks").create(
+        [
+          {
+            fields,
+          },
+        ],
+        function (err: any, records: any) {
+          if (err) {
+            console.error(err);
+            res.status(500).send("Error creating records");
+            return;
+          }
+          res.json(records[0].fields);
         }
-        res.status(200).send("Records added");
-      });
+      );
 
       break;
     }
@@ -59,42 +66,23 @@ async function handler(
         return;
       }
 
-      base("Task Instances").update(
+      // @ts-ignore
+      base("Tasks").update(
         [
           {
-            id: req.query.recordId as string,
+            id: req.query.recordId,
             fields: req.body.fields,
           },
         ],
         function (err: any, records: any) {
           if (err) {
             console.error(err);
-            res.status(500).send("Error updating record");
+            res.status(500).send("Error updating task");
             return;
           }
           res.json(records[0].fields);
         }
       );
-
-      break;
-    }
-    case "DELETE": {
-      if (!req.query.taskIds) {
-        res.status(400).send("Bad Request");
-        return;
-      }
-
-      const taskIds = (req.query.taskIds as string)?.split(",");
-
-      base("Task Instances").destroy(taskIds, function (err, deletedRecords) {
-        if (err) {
-          console.error(err);
-          res.status(500).send("Error deleting records");
-          return;
-        }
-        console.log("Deleted", deletedRecords?.length, "records");
-        res.status(200).send("Records deleted");
-      });
 
       break;
     }
