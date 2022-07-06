@@ -1,10 +1,8 @@
 import React, { useEffect, useMemo, useReducer, useState } from "react";
 import { Box, Button, Container, Divider, Typography } from "@mui/material";
-import useAirtable from "./hooks/useAirtable";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import SaveIcon from "@mui/icons-material/Save";
-import Airtable from "airtable";
 import {
   AppAction,
   AppContext,
@@ -25,6 +23,11 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ConfirmationModal from "./components/ConfirmationModal";
 import useInterval from "./hooks/useInterval";
+import useSubmission from "./hooks/useSubmission";
+import useTask from "./hooks/useTask";
+import axios from "axios";
+import { API_BASE_URL } from "./constants";
+import getJWTToken from "./util/getJWTToken";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -39,71 +42,6 @@ function appReducer(state: AppState, action: AppAction) {
   }
 }
 
-const getLoggedInUserRecordID = () =>
-  (window as any)?.logged_in_user?.airtable_record_id || "rec42IZUiZSfnHZvO";
-
-const updateSubmissionInAirtable = async (
-  submission: any,
-  projectContents: string,
-  isDraft: boolean
-): Promise<any> =>
-  new Promise((resolve, reject) => {
-    base("Submissions").update(
-      [
-        {
-          id: submission["Record ID"],
-          fields: {
-            Contents: projectContents,
-            IsDraft: `${isDraft}`,
-          },
-        },
-      ],
-      function (err: any, records: any) {
-        if (err) {
-          console.error(err);
-          reject(err);
-          return;
-        }
-        resolve(records[0].fields);
-      }
-    );
-  });
-
-const createSubmissionInAirtable = async (
-  task: any,
-  projectContents: string,
-  isDraft: boolean
-): Promise<any> =>
-  new Promise((resolve, reject) => {
-    base("Submissions").create(
-      [
-        {
-          fields: {
-            Name: task["Name"],
-            Status: "Awaiting Review",
-            Users: [getLoggedInUserRecordID()],
-            Tasks: [task["Record ID"]],
-            Contents: projectContents,
-            IsDraft: `${isDraft}`,
-          },
-        },
-      ],
-      function (err: any, records: any) {
-        if (err) {
-          console.error(err);
-          reject(err);
-          return;
-        }
-        resolve(records[0].fields);
-      }
-    );
-  });
-
-// FIXME: Move behind API to hide Airtable API key
-const base = new Airtable({ apiKey: "keyk0tDEC8slUu1HI" }).base(
-  "appk7ctplKKCsOhWQ"
-);
-
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
   {
@@ -111,18 +49,60 @@ const params: Record<string, any> = new Proxy(
   }
 );
 
+const getLoggedInUserRecordID = () =>
+  (window as any)?.logged_in_user?.airtable_record_id || "rec42IZUiZSfnHZvO";
+
+const updateSubmissionInAirtable = async (
+  submission: any,
+  projectContents: string,
+  isDraft: boolean
+): Promise<any> => {
+  const response = await axios.patch(
+    `${API_BASE_URL}/submissions?recordId=${
+      submission["Record ID"]
+    }&jwtToken=${getJWTToken()}`,
+    {
+      fields: {
+        Contents: projectContents,
+        IsDraft: `${isDraft}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
+const createSubmissionInAirtable = async (
+  task: any,
+  projectContents: string,
+  isDraft: boolean
+): Promise<any> => {
+  const response = await axios.post(
+    `${API_BASE_URL}/submissions?jwtToken=${getJWTToken()}`,
+    {
+      fields: {
+        Name: task["Name"],
+        Status: "Awaiting Review",
+        Users: [getLoggedInUserRecordID()],
+        Tasks: [task["Record ID"]],
+        Contents: projectContents,
+        IsDraft: `${isDraft}`,
+      },
+    }
+  );
+
+  return response.data;
+};
+
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
   const isScreenTooSmall = useMediaQuery("(max-width:600px)");
-  const { data: task, loading: taskLoading } = useAirtable({
-    tableName: "Tasks",
-    filterByFormula: `{Record ID} = '${params.recordId}'`,
+  const { data: task, loading: taskLoading } = useTask({
+    recordId: params.recordId,
   });
-  const { data: submission } = useAirtable({
-    tableName: "Submissions",
-    filterByFormula: `AND({Record ID (from Users)} = '${getLoggedInUserRecordID()}', {Record ID (from Tasks)} = '${
-      params.recordId
-    }')`,
+  const { data: submission } = useSubmission({
+    recordId: params.recordId,
+    loggedInUserRecordID: getLoggedInUserRecordID(),
   });
   const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
   const [solutionIsBeingSubmitted, setSolutionIsBeingSubmitted] =

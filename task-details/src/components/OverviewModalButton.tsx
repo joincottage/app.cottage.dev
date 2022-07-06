@@ -69,7 +69,9 @@ export default function OverviewModalButton({ task }: OwnProps) {
 
   const [acceptanceCriteria, setAcceptanceCriteria] = useState([]);
   useEffect(() => {
-    setAcceptanceCriteria(task["Acceptance Criteria"].split(";"));
+    setAcceptanceCriteria(
+      task["Acceptance Criteria"] && task["Acceptance Criteria"].split(";")
+    );
   }, [task]);
 
   return (
@@ -179,26 +181,29 @@ export default function OverviewModalButton({ task }: OwnProps) {
                   sx={{ mt: 1 }}
                 >
                   <FormGroup>
-                    {acceptanceCriteria.map(
-                      (a) =>
-                        a && (
-                          <FormControlLabel
-                            control={
-                              <Checkbox
-                                checked={checked.includes(a)}
-                                onChange={() =>
-                                  checked.includes(a)
-                                    ? setChecked(checked.filter((c) => c !== a))
-                                    : setChecked([...checked, a])
-                                }
-                                name={a}
-                              />
-                            }
-                            label={a}
-                            sx={{ color: "text.primary" }}
-                          />
-                        )
-                    )}
+                    {acceptanceCriteria &&
+                      acceptanceCriteria.map(
+                        (a) =>
+                          a && (
+                            <FormControlLabel
+                              control={
+                                <Checkbox
+                                  checked={checked.includes(a)}
+                                  onChange={() =>
+                                    checked.includes(a)
+                                      ? setChecked(
+                                          checked.filter((c) => c !== a)
+                                        )
+                                      : setChecked([...checked, a])
+                                  }
+                                  name={a}
+                                />
+                              }
+                              label={a}
+                              sx={{ color: "text.primary" }}
+                            />
+                          )
+                      )}
                   </FormGroup>
                 </FormControl>
               </Grid>
