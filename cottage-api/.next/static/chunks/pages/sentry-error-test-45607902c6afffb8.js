@@ -1,0 +1,2 @@
+(self.webpackChunk_N_E=self.webpackChunk_N_E||[]).push([[213],{6279:function(n,r,t){(window.__NEXT_P=window.__NEXT_P||[]).push(["/sentry-error-test",function(){return t(4642)}])},4642:function(n,r,t){"use strict";t.r(r),t.d(r,{default:function(){return u}});var o=t(5893);function u(){return(0,o.jsx)("button",{type:"button",onClick:function(){throw new Error("Sentry Frontend Error")},children:"Throw error"})}}},function(n){n.O(0,[774,888,179],(function(){return r=6279,n(n.s=r);var r}));var r=n.O();_N_E=r}]);
+//# sourceMappingURL=sentry-error-test-45607902c6afffb8.js.map

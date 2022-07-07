@@ -21,6 +21,17 @@ async function handler(
 
   switch (req.method) {
     case "GET": {
+      if (req.query.submissionId) {
+        const { data: submission } = await getDataFromAirtable({
+          tableName: "Submissions",
+          filterByFormula: `{Record ID} = '${req.query.submissionId}')`,
+        });
+
+        res.json(submission);
+
+        return;
+      }
+
       if (!req.query.recordId || !req.query.loggedInUserRecordID) {
         res.status(400).send("Bad Request");
         return;
