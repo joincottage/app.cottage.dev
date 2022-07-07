@@ -13,18 +13,18 @@ async function handler(
 ): Promise<void> {
   await runMiddleware(req, res, cors(corsOptions));
 
-  // const isValidUser = await validateUser(req.query.jwtToken as string);
-  // if (!isValidUser) {
-  //   res.status(401).send("Unauthorized");
-  //   return;
-  // }
+  const isValidUser = await validateUser(req.query.jwtToken as string);
+  if (!isValidUser) {
+    res.status(401).send("Unauthorized");
+    return;
+  }
 
   switch (req.method) {
     case "GET": {
       if (req.query.submissionId) {
         const { data: submission } = await getDataFromAirtable({
           tableName: "Submissions",
-          filterByFormula: `{Record ID} = '${req.query.submissionId}')`,
+          filterByFormula: `{Record ID} = '${req.query.submissionId}'`,
         });
 
         res.json(submission);

@@ -1,0 +1,1 @@
+self.__BUILD_MANIFEST={__rewrites:{beforeFiles:[],afterFiles:[],fallback:[]},"/_error":["static/chunks/pages/_error-f0d1e67e437380d5.js"],"/sentry-error-test":["static/chunks/pages/sentry-error-test-45607902c6afffb8.js"],sortedPages:["/_app","/_error","/sentry-error-test"]},self.__BUILD_MANIFEST_CB&&self.__BUILD_MANIFEST_CB();

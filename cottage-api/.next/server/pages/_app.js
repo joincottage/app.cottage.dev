@@ -4,7 +4,7 @@ exports.id = 888;
 exports.ids = [888];
 exports.modules = {
 
-/***/ 777:
+/***/ 211:
 /***/ (() => {
 
 global.__rewriteFramesDistDir__ = '.next';
@@ -155,7 +155,7 @@ module.exports = require("react");
 var __webpack_require__ = require("../webpack-runtime.js");
 __webpack_require__.C(exports);
 var __webpack_exec__ = (moduleId) => (__webpack_require__(__webpack_require__.s = moduleId))
-var __webpack_exports__ = (__webpack_exec__(846), __webpack_exec__(777), __webpack_exec__(561), __webpack_exec__(29));
+var __webpack_exports__ = (__webpack_exec__(846), __webpack_exec__(211), __webpack_exec__(561), __webpack_exec__(29));
 module.exports = __webpack_exports__;
 
 })();
