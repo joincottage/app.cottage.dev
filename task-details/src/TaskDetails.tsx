@@ -96,11 +96,11 @@ const createSubmissionInAirtable = async (
 
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
-  const isScreenTooSmall = useMediaQuery("(max-width:600px)");
+  const isScreenTooSmall = useMediaQuery("(max-width:800px)");
   const { data: task, loading: taskLoading } = useTask({
     recordId: params.recordId,
   });
-  const { data: submission } = useSubmission({
+  const { data: submission, loading: submissionLoading } = useSubmission({
     recordId: params.recordId,
     loggedInUserRecordID: getLoggedInUserRecordID(),
   });
@@ -239,7 +239,7 @@ const TaskDetails = () => {
     );
   }
 
-  return taskLoading ? null : (
+  return (submissionLoading || taskLoading) ? null : (
     <AppDataContext.Provider value={contextValue}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Helmet>

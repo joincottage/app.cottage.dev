@@ -17,7 +17,6 @@ import {
   Slide,
   Stack,
   Tooltip,
-  useMediaQuery,
 } from "@mui/material";
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
@@ -32,8 +31,6 @@ const TASK_OVERVIEW_DETAIL_PAGE_BASE_URL =
   "https://app.cottage.dev/task-overview";
 
 export default function OverviewModalButton({ task }: OwnProps) {
-  const isOverviewModalTooBig = useMediaQuery("(max-width:1200px)");
-
   const [open, setOpen] = useState(true);
   const handleOpen = () => {
     setOpen(true);
@@ -126,7 +123,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
             sx={{
               position: "absolute" as "absolute",
               margin: "auto",
-              width: isOverviewModalTooBig ? "800px" : "1200px",
+              width: "1200px",
               bgcolor: "background.paper",
               borderRadius: "6px",
               boxShadow: 24,

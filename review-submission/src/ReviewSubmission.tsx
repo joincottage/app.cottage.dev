@@ -1,12 +1,7 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import { Button, Container, Grid, Stack, Typography } from "@mui/material";
-import { PlaceType } from "./components/GooglePlacesAutocomplete";
-import useAirtable from "./hooks/useAirtable";
+import React, { useMemo, useReducer, useState } from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import Airtable from "airtable";
-import moment from "moment";
-import LoadingButton from "@mui/lab/LoadingButton";
 import {
   AppAction,
   AppContext,
@@ -17,9 +12,12 @@ import {
 import { SET_SELECTED_TASKS } from "./actions/setSelectedTasks";
 // @ts-ignore
 import { Helmet } from "react-helmet";
-import BasicTabs from "./components/BasicTabs";
 import Editor from "./components/Editor";
-import Overview from "./components/Overview";
+import useMediaQuery from "@mui/material/useMediaQuery";
+// @ts-ignore
+import ImageFadeIn from "react-image-fade-in";
+import BasicTabs from "./components/BasicTabs";
+import useSubmission from "./hooks/useSubmission";
 
 function appReducer(state: AppState, action: AppAction) {
   switch (action.type) {
@@ -34,43 +32,6 @@ function appReducer(state: AppState, action: AppAction) {
   }
 }
 
-const getLoggedInUserRecordID = () =>
-  (window as any)?.logged_in_user?.airtable_record_id || "rec42IZUiZSfnHZvO";
-
-const postSubmissionToAirtable = async (
-  task: any,
-  projectContents: string
-): Promise<any> =>
-  new Promise((resolve, reject) => {
-    base("Submissions").create(
-      [
-        {
-          fields: {
-            Name: task["Name"],
-            Status: "Awaiting Review",
-            Users: [getLoggedInUserRecordID()],
-            Tasks: [task["Record ID"]],
-            "Stackblitz Project ID": task["Stackblitz Project ID"],
-            Contents: projectContents,
-          },
-        },
-      ],
-      function (err: any, records: any) {
-        if (err) {
-          console.error(err);
-          reject(err);
-          return;
-        }
-        resolve(records[0].fields);
-      }
-    );
-  });
-
-// FIXME: Move behind API to hide Airtable API key
-const base = new Airtable({ apiKey: "keyk0tDEC8slUu1HI" }).base(
-  "appk7ctplKKCsOhWQ"
-);
-
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
   {
@@ -78,18 +39,20 @@ const params: Record<string, any> = new Proxy(
   }
 );
 
-// tslint:disable-next-line: cyclomatic-complexity
-const ReviewSubmission = () => {
-  const {
-    data: submission,
-    error: submissionError,
-    loading: submissionLoading,
-  } = useAirtable({
-    tableName: "Submissions",
-    filterByFormula: `{Record ID} = '${params.recordId}'`,
-  });
+const getLoggedInUserRecordID = () =>
+  (window as any)?.logged_in_user?.airtable_record_id || "rec42IZUiZSfnHZvO";
 
-  const [formIsSubmitting, setFormIsSubmitting] = useState(false);
+// tslint:disable-next-line: cyclomatic-complexity
+const TaskDetails = () => {
+  const isScreenTooSmall = useMediaQuery("(max-width:600px)");
+  const { data: submission, loading: submissionLoading } = useSubmission({
+    submissionId: params.recordId,
+  });
+  const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
+  const [solutionIsBeingSubmitted, setSolutionIsBeingSubmitted] =
+    useState(false);
+  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
+  const [newlyCreatedSubmission, setNewlyCreatedSubmission] = useState(null);
 
   // @ts-ignore
   const [state, dispatch] = useReducer(appReducer, initialState);
@@ -97,34 +60,54 @@ const ReviewSubmission = () => {
     return { state, dispatch };
   }, [state, dispatch]) as AppContext;
 
-  const onSubmit = () => {
-    async function submitForm() {
-      setFormIsSubmitting(true);
+  if (isScreenTooSmall) {
+    return (
+      <Container maxWidth="sm" sx={{ mt: 3 }}>
+        <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
+          <Typography variant="h4">Aw shucks, fam.</Typography>
+        </Box>
+        <Box sx={{ pl: 1, pr: 1 }}>
+          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+            Your screen is too small for us to display the workspace for this
+            competition.
+          </Typography>
+          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+            Try visiting this page on a laptop or desktop computer.
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            width: "100%",
+            mt: 3,
+            overflowX: "hidden",
+          }}
+        >
+          <ImageFadeIn
+            height={300}
+            src={
+              "https://storage.googleapis.com/cottage-assets/cat-in-box-with-lid.webp"
+            }
+          />
+        </Box>
+        <Box sx={{ mt: 1, mb: 1, display: "flex", justifyContent: "center" }}>
+          <Typography variant="caption" gutterBottom>
+            In the meantime, here is a cat trying to fit into a small box.
+          </Typography>
+        </Box>
+      </Container>
+    );
+  }
 
-      const projectContents = await (
-        window as any
-      ).stackblitzVM.getFsSnapshot();
-
-      await postSubmissionToAirtable(
-        submission[0],
-        JSON.stringify(projectContents, null, 2)
-      );
-
-      setFormIsSubmitting(false);
-      window.location.href = "/";
-    }
-
-    submitForm();
-  };
-
-  return submissionLoading ? null : (
+  return submission && submission.length > 0 ? (
     <AppDataContext.Provider value={contextValue}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Helmet>
           <style>{`
           iframe { border: none; }
           .container { max-width: none !important; }
-          #custom-code1 {
+          #custom-code1, #custom-code2, #custom-code3 {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
             position: absolute;
@@ -150,37 +133,25 @@ const ReviewSubmission = () => {
           <BasicTabs
             tabItems={[
               {
-                label: "Overview",
-                content: <Overview submission={submission} />,
-              },
-              {
                 label: "Editor",
                 content: <Editor submission={submission} />,
               },
             ]}
-            actions={[
+            leftActions={[]}
+            rightActions={[
               <Button
-                variant="outlined"
+                variant="text"
+                color="info"
                 onClick={() => (window.location.href = "/")}
               >
                 Cancel
               </Button>,
-              <Button variant="outlined" onClick={() => {}}>
-                Save Draft
-              </Button>,
-              <LoadingButton
-                loading={formIsSubmitting}
-                variant="contained"
-                onClick={onSubmit}
-              >
-                Submit
-              </LoadingButton>,
             ]}
           />
         </Container>
       </LocalizationProvider>
     </AppDataContext.Provider>
-  );
+  ) : null;
 };
 
-export default ReviewSubmission;
+export default TaskDetails;

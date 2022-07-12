@@ -7,37 +7,44 @@ interface OwnProps {
 }
 
 export default function Editor({ submission }: OwnProps) {
+  const contents = JSON.parse(submission[0]["Contents"]);
+  const dependencies = JSON.parse(submission[0]["Dependencies (from Tasks)"]);
+  const openFile = Object.keys(JSON.parse(submission[0]["Contents"]))[1];
+
   useEffect(() => {
-    async function initializeEditor() {
+    async function initializeEditorWithContent() {
       const vm = ((window as any).stackblitzVM =
         await StackblitzSDK.embedProject(
           "editor",
           {
-            files: JSON.parse(submission[0]["Contents"]),
+            files: contents,
             title: submission[0]["Name"],
             description: "",
             template: "create-react-app",
+            dependencies,
           },
           {
-            openFile: Object.keys(JSON.parse(submission[0]["Contents"]))[0],
-            height: window.innerHeight - 70,
+            openFile,
+            height: window.innerHeight,
+            forceEmbedLayout: true,
           }
         ));
     }
 
-    if (submission) {
-      initializeEditor();
-    }
-  }, [submission]);
+    initializeEditorWithContent();
+  }, []);
 
   return (
     <Box
       sx={{
         position: "relative",
         background: "rgb(21,24,30)",
+        overflow: "hidden",
       }}
     >
-      <div id="editor"></div>
+      <div style={{ position: "relative", overflow: "hidden" }}>
+        <div id="editor"></div>
+      </div>
     </Box>
   );
 }

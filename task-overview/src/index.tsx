@@ -2,7 +2,18 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import TaskOverview from "./TaskOverview";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { orange } from "@mui/material/colors";
+import * as Sentry from "@sentry/react";
+import { BrowserTracing } from "@sentry/tracing";
+
+Sentry.init({
+  dsn: "https://36ee1b71974e4741be97e5862ac69da1@o1125793.ingest.sentry.io/6553329",
+  integrations: [new BrowserTracing()],
+
+  // Set tracesSampleRate to 1.0 to capture 100%
+  // of transactions for performance monitoring.
+  // We recommend adjusting this value in production
+  tracesSampleRate: 1.0,
+});
 
 declare module "@mui/material/styles" {
   interface Theme {
@@ -37,7 +48,7 @@ const theme = createTheme({
     },
     text: {
       primary: "#ccc",
-      secondary: '#ccc'
+      secondary: "#ccc",
     },
   },
 });

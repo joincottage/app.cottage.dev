@@ -22,7 +22,14 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      <Box sx={{ display: value === index ? "block" : "none" }}>
+      <Box
+        sx={{
+          display: value === index ? "block" : "none",
+          position: "relative",
+          height: "calc(100vh - 54px)",
+          overflow: "hidden",
+        }}
+      >
         <Typography>{children}</Typography>
       </Box>
     </div>
@@ -41,10 +48,15 @@ interface OwnProps {
     label: string;
     content: JSX.Element;
   }[];
-  actions: JSX.Element[];
+  leftActions: JSX.Element[];
+  rightActions: JSX.Element[];
 }
 
-export default function BasicTabs({ tabItems, actions }: OwnProps) {
+export default function BasicTabs({
+  tabItems,
+  leftActions,
+  rightActions,
+}: OwnProps) {
   const [value, setValue] = React.useState(0);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -52,24 +64,34 @@ export default function BasicTabs({ tabItems, actions }: OwnProps) {
   };
 
   return (
-    <Box sx={{ width: "100%" }}>
+    <Box sx={{ width: "100%", bgcolor: "background.default" }}>
       <Stack
         sx={{ borderBottom: 1, borderColor: "divider" }}
         direction="row"
         justifyContent="space-between"
       >
-        <Tabs
+        {/* <Tabs
           value={value}
           onChange={handleChange}
           aria-label="basic tabs example"
         >
           {tabItems.map((t, i) => (
-            <Tab label={t.label} {...a11yProps(i)} />
+            <Tab
+              label={t.label}
+              {...a11yProps(i)}
+              color="info"
+              sx={{ color: "info.main" }}
+            />
           ))}
-        </Tabs>
+        </Tabs> */}
+        <Box sx={{ p: 1 }}>
+          <Stack direction="row-reverse" spacing={2}>
+            {leftActions}
+          </Stack>
+        </Box>
         <Box sx={{ p: 1 }}>
           <Stack direction="row" spacing={2}>
-            {actions}
+            {rightActions}
           </Stack>
         </Box>
       </Stack>
