@@ -220,8 +220,8 @@ export default function OverviewModalButton({ task }: OwnProps) {
               </Grid>
             </Grid>
             <Stack direction="row-reverse">
-              <Button variant="text" color="info" onClick={handleOpenNewTab}>
-                Open in new tab <OpenInNewIcon sx={{ ml: 1 }} />
+              <Button variant="text" color="info" onClick={handleOpenNewTab} sx={{ mt: 3}}>
+                Open this window in new tab <OpenInNewIcon sx={{ ml: 1 }} />
               </Button>
             </Stack>
           </Box>
