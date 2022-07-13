@@ -25,7 +25,7 @@ export default function Editor({ task, submission }: OwnProps) {
             dependencies: JSON.parse(task[0]["Dependencies"]),
           },
           {
-            openFile: Object.keys(JSON.parse(task[0]["Contents"]))[1],
+            openFile: task[0]["Open File Name"],
             height: window.innerHeight,
             forceEmbedLayout: true,
           }
