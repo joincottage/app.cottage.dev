@@ -251,7 +251,7 @@ const TaskDetails = () => {
         </Box>
         <Box sx={{ pl: 1, pr: 1 }}>
           <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
-            Can you make the height of this window bigger than 800 pixels?
+            Can you make the height of this window bigger than 700 pixels?
           </Typography>
           <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
             Our cloud-hosted IDE needs room to breath.
