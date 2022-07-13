@@ -164,7 +164,15 @@ export default function OverviewModalButton({ task }: OwnProps) {
                   Open Interactive Figma Design
                 </Button>
               </Grid>
-              <Grid item xs={6}>
+              <Grid
+                item
+                xs={6}
+                sx={{
+                  maxHeight: "70vh",
+                  overflowY: "scroll",
+                  overflowX: "hidden",
+                }}
+              >
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Description
                 </Typography>
