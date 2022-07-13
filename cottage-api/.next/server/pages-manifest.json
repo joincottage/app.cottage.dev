@@ -1,6 +1,12 @@
 {
-  "/_app": "pages/_app.js",
   "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/api/component-scripts": "pages/api/component-scripts.js"
+  "/api/airtable/submissions": "pages/api/airtable/submissions.js",
+  "/api/airtable/tasklist-templates": "pages/api/airtable/tasklist-templates.js",
+  "/api/airtable/tasklist": "pages/api/airtable/tasklist.js",
+  "/api/airtable/tasks": "pages/api/airtable/tasks.js",
+  "/api/airtable/workflow": "pages/api/airtable/workflow.js",
+  "/api/component-scripts": "pages/api/component-scripts.js",
+  "/sentry-error-test": "pages/sentry-error-test.html",
+  "/_app": "pages/_app.js",
+  "/_document": "pages/_document.js"
 }

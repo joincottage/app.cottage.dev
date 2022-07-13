@@ -34,7 +34,7 @@ async function handler(
         `https://cottage-${req.query.componentName}.vercel.app/asset-manifest.json`
       );
       const componentInitScriptPath =
-        assetManifest.data.files[req.query.fileName];
+        assetManifest.data.files[req.query.fileName as string];
 
       const componentInitScript = await axios.get(
         `https://cottage-${req.query.componentName}.vercel.app${componentInitScriptPath}`
