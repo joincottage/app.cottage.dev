@@ -203,6 +203,9 @@ const TaskDetails = () => {
   }
 
   if (isScreenTooSmall) {
+    // @ts-ignore
+    window.posthog.capture("cat-box");
+
     return (
       <Container maxWidth="sm" sx={{ mt: 3 }}>
         <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
@@ -243,6 +246,9 @@ const TaskDetails = () => {
   }
 
   if (isScreenTooSquishedVertically) {
+    // @ts-ignore
+    window.posthog.capture("confused-corgi");
+
     return (
       <Container maxWidth="sm" sx={{ mt: 3 }}>
         <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
