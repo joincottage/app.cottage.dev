@@ -119,9 +119,6 @@ const TaskDetails = () => {
   }, [state, dispatch]) as AppContext;
 
   const onSaveDraft = () => {
-    // @ts-ignore
-    window.posthog.capture("clicked 'Save draft'");
-
     async function saveDraft() {
       setDraftIsBeingSaved(true);
 
@@ -355,7 +352,12 @@ const TaskDetails = () => {
                 loading={draftIsBeingSaved}
                 variant="outlined"
                 color="info"
-                onClick={onSaveDraft}
+                onClick={() => {
+                  // @ts-ignore
+                  window.posthog.capture("clicked 'Save draft'");
+
+                  onSaveDraft();
+                }}
               >
                 <SaveIcon sx={{ mr: 1 }} />
                 Save Draft

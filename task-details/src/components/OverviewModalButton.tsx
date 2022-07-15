@@ -22,6 +22,7 @@ import {
 import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import { useLocalStorage } from "usehooks-ts";
 
 interface OwnProps {
   task: any;
@@ -33,6 +34,10 @@ const TASK_OVERVIEW_DETAIL_PAGE_BASE_URL =
 
 export default function OverviewModalButton({ task }: OwnProps) {
   const isOverviewModalTooBig = useMediaQuery("(max-width:1200px)");
+  const [hasSeenTooltip, setHasSeenTooltip] = useLocalStorage(
+    "hasSeenTooltip",
+    false
+  );
 
   const [open, setOpen] = useState(true);
   const handleOpen = () => {
@@ -69,7 +74,6 @@ export default function OverviewModalButton({ task }: OwnProps) {
   };
 
   const [showTooltip, setShowTooltip] = useState(false);
-  const [hasSeenTooltip, setHasSeenTooltip] = useState(false);
 
   const [checked, setChecked] = useState([]);
 
