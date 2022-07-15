@@ -119,6 +119,9 @@ const TaskDetails = () => {
   }, [state, dispatch]) as AppContext;
 
   const onSaveDraft = () => {
+    // @ts-ignore
+    window.posthog.capture("clicked 'Save draft'");
+
     async function saveDraft() {
       setDraftIsBeingSaved(true);
 
@@ -153,6 +156,9 @@ const TaskDetails = () => {
   };
 
   const onSubmitSolution = async () => {
+    // @ts-ignore
+    window.posthog.capture("clicked 'Submit solution");
+
     setSolutionIsBeingSubmitted(true);
 
     const projectContents = await (window as any).stackblitzVM.getFsSnapshot();
@@ -336,7 +342,12 @@ const TaskDetails = () => {
               <Button
                 variant="text"
                 color="info"
-                onClick={() => (window.location.href = "/")}
+                onClick={() => {
+                  // @ts-ignore
+                  window.posthog.capture("clicked cancel");
+
+                  window.location.href = "/";
+                }}
               >
                 Cancel
               </Button>,

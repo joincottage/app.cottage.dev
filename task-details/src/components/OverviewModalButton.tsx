@@ -58,6 +58,9 @@ export default function OverviewModalButton({ task }: OwnProps) {
     }
   };
   const handleOpenNewTab = () => {
+    // @ts-ignore
+    window.posthog.capture("opened task details modal in new tab");
+
     window.open(
       `${TASK_OVERVIEW_DETAIL_PAGE_BASE_URL}?recordId=${task["Record ID"]}`,
       "_blank"
@@ -101,7 +104,15 @@ export default function OverviewModalButton({ task }: OwnProps) {
         arrow
         open={showTooltip}
       >
-        <Button variant="contained" onClick={handleOpen}>
+        <Button
+          variant="contained"
+          onClick={() => {
+            // @ts-ignore
+            window.posthog.capture("clicked 'Show task overview'");
+
+            handleOpen();
+          }}
+        >
           Show Task Overview
         </Button>
       </Tooltip>
@@ -157,9 +168,12 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 <Button
                   variant="contained"
                   sx={{ color: "text.primary", mt: 3, width: "350px" }}
-                  onClick={() =>
-                    window.open(task["Figma Direct Link"], "_blank")
-                  }
+                  onClick={() => {
+                    // @ts-ignore
+                    window.posthog.capture("opened Figma design in new tab");
+
+                    window.open(task["Figma Direct Link"], "_blank");
+                  }}
                 >
                   Open Interactive Figma Design
                 </Button>
@@ -200,13 +214,18 @@ export default function OverviewModalButton({ task }: OwnProps) {
                               control={
                                 <Checkbox
                                   checked={checked.includes(a)}
-                                  onChange={() =>
-                                    checked.includes(a)
+                                  onChange={() => {
+                                    // @ts-ignore
+                                    window.posthog.capture(
+                                      "checked a checkbox in acceptance criteria"
+                                    );
+
+                                    return checked.includes(a)
                                       ? setChecked(
                                           checked.filter((c) => c !== a)
                                         )
-                                      : setChecked([...checked, a])
-                                  }
+                                      : setChecked([...checked, a]);
+                                  }}
                                   name={a}
                                 />
                               }
