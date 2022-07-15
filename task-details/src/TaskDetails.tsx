@@ -118,6 +118,15 @@ const TaskDetails = () => {
     return { state, dispatch };
   }, [state, dispatch]) as AppContext;
 
+  useEffect(() => {
+    if (!taskLoading && !submissionLoading && submission.length === 0) {
+      // @ts-ignore
+      window.posthog.capture("competition start", {
+        taskRecordIdInAirtable: task[0]["Record ID"],
+      });
+    }
+  }, [submissionLoading, taskLoading]);
+
   const onSaveDraft = () => {
     async function saveDraft() {
       setDraftIsBeingSaved(true);
@@ -154,7 +163,9 @@ const TaskDetails = () => {
 
   const onSubmitSolution = async () => {
     // @ts-ignore
-    window.posthog.capture("clicked 'Submit solution");
+    window.posthog.capture("clicked 'Submit solution'", {
+      taskRecordIdInAirtable: task[0]["Record ID"],
+    });
 
     setSolutionIsBeingSubmitted(true);
 
@@ -365,7 +376,9 @@ const TaskDetails = () => {
               <LoadingButton
                 loading={false}
                 variant="contained"
-                onClick={() => setShowConfirmationModal(true)}
+                onClick={() => {
+                  setShowConfirmationModal(true);
+                }}
               >
                 <RocketLaunchIcon sx={{ mr: 1 }} />
                 SUBMIT SOLUTION
