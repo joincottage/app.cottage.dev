@@ -169,7 +169,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 xs={6}
                 sx={{
                   maxHeight: "70vh",
-                  overflowY: "scroll",
+                  overflowY: "auto",
                   overflowX: "hidden",
                 }}
               >
@@ -220,7 +220,12 @@ export default function OverviewModalButton({ task }: OwnProps) {
               </Grid>
             </Grid>
             <Stack direction="row-reverse">
-              <Button variant="text" color="info" onClick={handleOpenNewTab} sx={{ mt: 3}}>
+              <Button
+                variant="text"
+                color="info"
+                onClick={handleOpenNewTab}
+                sx={{ mt: 3 }}
+              >
                 Open this window in new tab <OpenInNewIcon sx={{ ml: 1 }} />
               </Button>
             </Stack>
