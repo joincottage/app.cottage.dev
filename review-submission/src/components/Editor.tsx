@@ -26,7 +26,6 @@ export default function Editor({ submission }: OwnProps) {
           {
             openFile,
             height: window.innerHeight,
-            forceEmbedLayout: true,
           }
         ));
     }
