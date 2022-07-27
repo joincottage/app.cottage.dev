@@ -186,11 +186,6 @@ const TaskDetails = () => {
     );
   };
 
-  const SAVE_DRAFT_INTERVAL_MILLIS = 10000;
-  useInterval(() => {
-    onSaveDraft();
-  }, SAVE_DRAFT_INTERVAL_MILLIS);
-
   // Rather than render conditionally, show responsive screens as overlays so that code gets saved
   if (
     submission &&
