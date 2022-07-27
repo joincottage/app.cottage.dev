@@ -8,6 +8,7 @@ interface OwnProps {
 }
 
 export default function Editor({ task, submission }: OwnProps) {
+  console.log(`task: ${JSON.parse(task[0]["Contents"])}`);
   const contents =
     submission && submission.length > 0
       ? JSON.parse(submission[0]["Contents"])

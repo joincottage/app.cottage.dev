@@ -89,6 +89,31 @@ const TaskOverview = () => {
         >
           <Container maxWidth="lg">
             <Grid container spacing={2}>
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "text.primary", textAlign: "center" }}
+                  >
+                    How To Get Started
+                  </Typography>
+                  <Stack sx={{ mt: 2 }} alignItems="center">
+                    <iframe
+                      src={task["Getting Started Video Embed"]}
+                      width="500"
+                      height="350"
+                      allowFullScreen
+                    />
+                  </Stack>
+                </Box>
+              </Grid>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Figma Design Preview

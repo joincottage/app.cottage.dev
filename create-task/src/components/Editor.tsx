@@ -19,10 +19,16 @@ export default function Editor({ task }: OwnProps) {
             title: task ? task[0]["Name"] : "",
             description: "",
             template: "create-react-app",
-            dependencies: task ? JSON.parse(task[0]["Dependencies"]) : {},
+            dependencies:
+              task && task[0]["Dependencies"]
+                ? JSON.parse(task[0]["Dependencies"])
+                : {},
           },
           {
-            openFile: task ? task[0]["Open File Name"] : undefined,
+            openFile:
+              task && task[0]["Open File Name"]
+                ? task[0]["Open File Name"]
+                : undefined,
             height: window.innerHeight,
             forceEmbedLayout: true,
           }

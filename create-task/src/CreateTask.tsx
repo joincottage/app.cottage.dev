@@ -1,16 +1,8 @@
-import React, { useEffect, useMemo, useReducer, useState } from "react";
-import { Box, Button, Container, Divider, Typography } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import SaveIcon from "@mui/icons-material/Save";
-import {
-  AppAction,
-  AppContext,
-  AppDataContext,
-  AppState,
-  initialState,
-} from "./AppContext";
-import { SET_SELECTED_TASKS } from "./actions/setSelectedTasks";
 // @ts-ignore
 import { Helmet } from "react-helmet";
 import Editor from "./components/Editor";
@@ -23,24 +15,10 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ConfirmationModal from "./components/ConfirmationModal";
 import useInterval from "./hooks/useInterval";
-import useSubmission from "./hooks/useSubmission";
 import useTask from "./hooks/useTask";
 import axios from "axios";
 import { API_BASE_URL } from "./constants";
 import getJWTToken from "./util/getJWTToken";
-
-function appReducer(state: AppState, action: AppAction) {
-  switch (action.type) {
-    case SET_SELECTED_TASKS:
-      return {
-        ...state,
-        selectedTasks: action.payload.selectedTasks,
-      };
-    default:
-      // TODO: report unknown action types as an error
-      throw new Error(`Unrecognized action: ${action.type}`);
-  }
-}
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -55,6 +33,7 @@ const getLoggedInUserRecordID = () =>
 const updateTaskInAirtable = async (
   task: any,
   projectContents: string,
+  dependencies: string,
   isDraft: boolean
 ): Promise<any> => {
   const response = await axios.patch(
@@ -64,6 +43,7 @@ const updateTaskInAirtable = async (
     {
       fields: {
         Contents: projectContents,
+        Dependencies: dependencies,
         IsDraft: `${isDraft}`,
       },
     }
@@ -72,24 +52,11 @@ const updateTaskInAirtable = async (
   return response.data;
 };
 
-const createTaskInAirtable = async (
-  projectContents: string,
-  isDraft: boolean
-): Promise<any> => {
-  const response = await axios.post(
-    `${API_BASE_URL}/tasks?jwtToken=${getJWTToken()}`,
-    {
-      fields: {
-        Name: "",
-        Status: "Todo",
-        Requester: [getLoggedInUserRecordID()],
-        Contents: projectContents,
-        IsDraft: `${isDraft}`,
-      },
-    }
-  );
+const getEditorContents = async () => {
+  const files = await (window as any).stackblitzVM.getFsSnapshot();
+  const dependencies = await (window as any).stackblitzVM.getDependencies();
 
-  return response.data;
+  return { files, dependencies };
 };
 
 // tslint:disable-next-line: cyclomatic-complexity
@@ -104,27 +71,19 @@ const CreateTask = () => {
   const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
   const [taskIsBeingSubmitted, setTaskIsBeingSubmitted] = useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [newlyCreatedTask, setNewlyCreatedTask] = useState(null);
-
-  // @ts-ignore
-  const [state, dispatch] = useReducer(appReducer, initialState);
-  const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]) as AppContext;
 
   const onSaveDraft = () => {
     async function saveDraft() {
       setDraftIsBeingSaved(true);
 
-      const projectContents = await (
-        window as any
-      ).stackblitzVM.getFsSnapshot();
+      const { files, dependencies } = await getEditorContents();
 
-        await updateTaskInAirtable(
-          task[0],
-          JSON.stringify(projectContents, null, 2),
-          true
-        );
+      await updateTaskInAirtable(
+        task[0],
+        JSON.stringify(files, null, 2),
+        JSON.stringify(dependencies, null, 2),
+        true
+      );
 
       // It's a bit jarring to see the loading spinner flash so quickly
       setTimeout(() => {
@@ -143,19 +102,15 @@ const CreateTask = () => {
       return;
     }
 
-    // @ts-ignore
-    window.posthog.capture("clicked 'Launch Competition'", {
-      taskRecordIdInAirtable: task[0]["Record ID"],
-    });
-
     setTaskIsBeingSubmitted(true);
 
-    const projectContents = await (window as any).stackblitzVM.getFsSnapshot();
+    const { files, dependencies } = await getEditorContents();
 
-    const taskToSubmit = task[0] || newlyCreatedTask;
+    const taskToSubmit = task[0];
     await updateTaskInAirtable(
       taskToSubmit,
-      JSON.stringify(projectContents, null, 2),
+      JSON.stringify(files, null, 2),
+      JSON.stringify(dependencies, null, 2),
       false
     );
 
@@ -166,16 +121,17 @@ const CreateTask = () => {
         resolve();
       }, 2000)
     );
-  };
 
-  const SAVE_DRAFT_INTERVAL_MILLIS = 10000;
-  useInterval(() => {
-    onSaveDraft();
-  }, SAVE_DRAFT_INTERVAL_MILLIS);
+    // @ts-ignore
+    window.posthog &&
+      window.posthog.capture("clicked 'Launch Competition'", {
+        taskRecordIdInAirtable: task[0]["Record ID"],
+      });
+  };
 
   if (isScreenTooSmall) {
     // @ts-ignore
-    window.posthog.capture("cat-box");
+    window.posthog && window.posthog.capture("cat-box");
 
     return (
       <Container maxWidth="sm" sx={{ mt: 3 }}>
@@ -217,10 +173,9 @@ const CreateTask = () => {
   }
 
   return taskLoading ? null : (
-    <AppDataContext.Provider value={contextValue}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Helmet>
-          <style>{`
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Helmet>
+        <style>{`
           iframe { border: none; }
           .container { max-width: none !important; }
           #custom-code1, #custom-code2, #custom-code3 {
@@ -234,74 +189,74 @@ const CreateTask = () => {
           }
           .col-12 { padding: 0 !important; }
           `}</style>
-        </Helmet>
-        <Container
-          maxWidth={false}
-          style={{
-            padding: 0,
-            position: "absolute",
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <BasicTabs
-            tabItems={[
-              {
-                label: "Editor",
-                content: <Editor task={params.recordId ? task : null} />,
-              },
-            ]}
-            leftActions={[<OverviewModalButton task={task[0]} />]}
-            rightActions={[
-              <Button
-                variant="text"
-                color="info"
-                onClick={() => {
-                  // @ts-ignore
-                  window.posthog.capture("clicked cancel");
+      </Helmet>
+      <Container
+        maxWidth={false}
+        style={{
+          padding: 0,
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <BasicTabs
+          tabItems={[
+            {
+              label: "Editor",
+              content: <Editor task={params.recordId ? task : null} />,
+            },
+          ]}
+          leftActions={[<OverviewModalButton task={task[0]} />]}
+          rightActions={[
+            <Button
+              variant="text"
+              color="info"
+              onClick={() => {
+                // @ts-ignore
+                window.posthog.capture("clicked cancel");
 
-                  window.location.href = "/";
-                }}
-              >
-                Cancel
-              </Button>,
-              <LoadingButton
-                loading={draftIsBeingSaved}
-                variant="outlined"
-                color="info"
-                onClick={() => {
-                  // @ts-ignore
+                window.location.href = "/";
+              }}
+            >
+              Cancel
+            </Button>,
+            <LoadingButton
+              loading={draftIsBeingSaved}
+              variant="outlined"
+              color="info"
+              onClick={() => {
+                onSaveDraft();
+
+                // @ts-ignore
+                window.posthog &&
                   window.posthog.capture("clicked 'Save draft'");
-
-                  onSaveDraft();
-                }}
-              >
-                <SaveIcon sx={{ mr: 1 }} />
-                Save Draft
-              </LoadingButton>,
-              <LoadingButton
-                loading={false}
-                variant="contained"
-                onClick={() => {
-                  setShowConfirmationModal(true);
-                }}
-              >
-                <RocketLaunchIcon sx={{ mr: 1 }} />
-                LAUNCH COMPETITION
-              </LoadingButton>,
-            ]}
-          />
-          <ConfirmationModal
-            showModal={showConfirmationModal}
-            onConfirm={onLaunchCompetition}
-            loading={taskIsBeingSubmitted}
-            onClose={() => setShowConfirmationModal(false)}
-          />
-        </Container>
-      </LocalizationProvider>
-    </AppDataContext.Provider>
+              }}
+            >
+              <SaveIcon sx={{ mr: 1 }} />
+              Save Draft
+            </LoadingButton>,
+            <LoadingButton
+              loading={false}
+              variant="contained"
+              onClick={() => {
+                setShowConfirmationModal(true);
+              }}
+            >
+              <RocketLaunchIcon sx={{ mr: 1 }} />
+              LAUNCH COMPETITION
+            </LoadingButton>,
+          ]}
+        />
+        <ConfirmationModal
+          showModal={showConfirmationModal}
+          onConfirm={onLaunchCompetition}
+          loading={taskIsBeingSubmitted}
+          onClose={() => setShowConfirmationModal(false)}
+        />
+      </Container>
+    </LocalizationProvider>
   );
 };
 

@@ -28,6 +28,8 @@ interface OwnProps {
   task: any;
 }
 
+window.posthog = window.posthog || { capture: () => {} };
+
 const TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS = 10000;
 const TASK_OVERVIEW_DETAIL_PAGE_BASE_URL =
   "https://app.cottage.dev/task-overview";
@@ -141,7 +143,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
             sx={{
               position: "absolute" as "absolute",
               margin: "auto",
-              width: isOverviewModalTooBig ? "800px" : "1200px",
+              width: "800px",
               bgcolor: "background.paper",
               borderRadius: "6px",
               boxShadow: 24,
@@ -156,7 +158,40 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 <CloseIcon sx={{ color: "text.primary" }} />
               </Box>
             </Stack>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                maxHeight: "70vh",
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+            >
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "text.primary", textAlign: "center" }}
+                  >
+                    How To Get Started
+                  </Typography>
+                  <Stack sx={{ mt: 2 }} alignItems="center">
+                    <iframe
+                      src={task["Getting Started Video Embed"]}
+                      width="500"
+                      height="350"
+                      allowFullScreen
+                    />
+                  </Stack>
+                </Box>
+              </Grid>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Figma Design Preview
@@ -182,15 +217,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                   Open Interactive Figma Design
                 </Button>
               </Grid>
-              <Grid
-                item
-                xs={6}
-                sx={{
-                  maxHeight: "70vh",
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                }}
-              >
+              <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Description
                 </Typography>
