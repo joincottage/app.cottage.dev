@@ -96,7 +96,7 @@ const createSubmissionInAirtable = async (
 
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
-  const isScreenTooSmall = useMediaQuery("(max-width:800px)");
+  // const isScreenTooSmall = useMediaQuery("(max-width:800px)");
   const { data: task, loading: taskLoading } = useTask({
     recordId: params.recordId,
     loggedInUserRecordID: getLoggedInUserRecordID(),
@@ -210,48 +210,48 @@ const TaskDetails = () => {
     );
   }
 
-  if (isScreenTooSmall) {
-    // @ts-ignore
-    window.posthog.capture("cat-box");
+  // if (isScreenTooSmall) {
+  //   // @ts-ignore
+  //   window.posthog.capture("cat-box");
 
-    return (
-      <Container maxWidth="sm" sx={{ mt: 3 }}>
-        <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
-          <Typography variant="h4">Aw shucks, fam.</Typography>
-        </Box>
-        <Box sx={{ pl: 1, pr: 1 }}>
-          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
-            Your screen is too small for us to display the workspace for this
-            competition.
-          </Typography>
-          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
-            Try visiting this page on a laptop or desktop computer.
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            width: "100%",
-            mt: 3,
-            overflowX: "hidden",
-          }}
-        >
-          <ImageFadeIn
-            height={300}
-            src={
-              "https://storage.googleapis.com/cottage-assets/cat-in-box-with-lid.webp"
-            }
-          />
-        </Box>
-        <Box sx={{ mt: 1, mb: 1, display: "flex", justifyContent: "center" }}>
-          <Typography variant="caption" gutterBottom>
-            In the meantime, here is a cat trying to fit into a small box.
-          </Typography>
-        </Box>
-      </Container>
-    );
-  }
+  //   return (
+  //     <Container maxWidth="sm" sx={{ mt: 3 }}>
+  //       <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
+  //         <Typography variant="h4">Aw shucks, fam.</Typography>
+  //       </Box>
+  //       <Box sx={{ pl: 1, pr: 1 }}>
+  //         <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+  //           Your screen is too small for us to display the workspace for this
+  //           competition.
+  //         </Typography>
+  //         <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+  //           Try visiting this page on a laptop or desktop computer.
+  //         </Typography>
+  //       </Box>
+  //       <Box
+  //         sx={{
+  //           display: "flex",
+  //           justifyContent: "center",
+  //           width: "100%",
+  //           mt: 3,
+  //           overflowX: "hidden",
+  //         }}
+  //       >
+  //         <ImageFadeIn
+  //           height={300}
+  //           src={
+  //             "https://storage.googleapis.com/cottage-assets/cat-in-box-with-lid.webp"
+  //           }
+  //         />
+  //       </Box>
+  //       <Box sx={{ mt: 1, mb: 1, display: "flex", justifyContent: "center" }}>
+  //         <Typography variant="caption" gutterBottom>
+  //           In the meantime, here is a cat trying to fit into a small box.
+  //         </Typography>
+  //       </Box>
+  //     </Container>
+  //   );
+  // }
 
   return submissionLoading || taskLoading ? null : (
     <AppDataContext.Provider value={contextValue}>

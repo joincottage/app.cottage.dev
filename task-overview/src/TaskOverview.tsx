@@ -106,7 +106,7 @@ const TaskOverview = () => {
                   </Typography>
                   <Stack sx={{ mt: 2 }} alignItems="center">
                     <iframe
-                      src={task["Getting Started Video Embed"]}
+                      src={task[0]["Getting Started Video Embed"]}
                       width="500"
                       height="350"
                       allowFullScreen
