@@ -18,12 +18,6 @@ const components: Record<string, () => JSX.Element | null> = {
 };
 
 function renderPage(pageName: string) {
-  const rootElement = document.getElementById("root");
-  if (!rootElement) {
-    console.error('Could not find <div id="roo"></div> in document');
-    return;
-  }
-
   console.log(`rendering ${pageName}`);
 
   const PageComponent = components[pageName];
@@ -31,6 +25,10 @@ function renderPage(pageName: string) {
     console.error("could not find component for pageName: " + pageName);
     return;
   }
+
+  const rootElement = document.createElement("div");
+  rootElement.setAttribute("id", pageName);
+  document.body.appendChild(rootElement);
 
   const root = createRoot(rootElement);
   root.render(
@@ -47,6 +45,6 @@ function renderPage(pageName: string) {
 window.Cottage = window.Cottage || {};
 window.Cottage.renderPage = renderPage;
 
-//if (process.env.REACT_APP_TEST_ENV === "dev") {
-renderPage("task-details");
-//}
+if (process.env.REACT_APP_TEST_ENV === "dev") {
+  renderPage("task-details");
+}
