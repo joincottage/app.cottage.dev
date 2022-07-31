@@ -14,11 +14,11 @@ import BasicTabs from "./components/BasicTabs";
 import LoadingButton from "@mui/lab/LoadingButton";
 import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ConfirmationModal from "./components/ConfirmationModal";
-import useInterval from "./hooks/useInterval";
-import useTask from "./hooks/useTask";
+import useInterval from "../../hooks/useInterval";
+import useTask from "../../hooks/useTask";
 import axios from "axios";
 import { API_BASE_URL } from "../../constants";
-import getJWTToken from "./util/getJWTToken";
+import getJWTToken from "../../util/getJWTToken";
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),

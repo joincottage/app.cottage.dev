@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../pages/task-overview/src/constants";
-import getJWTToken from "../pages/task-overview/src/util/getJWTToken";
+import { API_BASE_URL } from "../constants";
+import getJWTToken from "../util/getJWTToken";
 
 interface OwnProps {
   recordId: string;

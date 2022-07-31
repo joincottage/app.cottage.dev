@@ -1,15 +1,7 @@
-import React, { useMemo, useReducer, useState } from "react";
+import React from "react";
 import { Box, Button, Container, Typography } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import {
-  AppAction,
-  AppContext,
-  AppDataContext,
-  AppState,
-  initialState,
-} from "./AppContext";
-import { SET_SELECTED_TASKS } from "./actions/setSelectedTasks";
 // @ts-ignore
 import { Helmet } from "react-helmet";
 import Editor from "./components/Editor";
@@ -17,20 +9,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 // @ts-ignore
 import ImageFadeIn from "react-image-fade-in";
 import BasicTabs from "./components/BasicTabs";
-import useSubmission from "./hooks/useSubmission";
-
-function appReducer(state: AppState, action: AppAction) {
-  switch (action.type) {
-    case SET_SELECTED_TASKS:
-      return {
-        ...state,
-        selectedTasks: action.payload.selectedTasks,
-      };
-    default:
-      // TODO: report unknown action types as an error
-      throw new Error(`Unrecognized action: ${action.type}`);
-  }
-}
+import useSubmission from "../../hooks/useSubmission";
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -39,26 +18,12 @@ const params: Record<string, any> = new Proxy(
   }
 );
 
-const getLoggedInUserRecordID = () =>
-  (window as any)?.logged_in_user?.airtable_record_id || "rec42IZUiZSfnHZvO";
-
 // tslint:disable-next-line: cyclomatic-complexity
-const TaskDetails = () => {
+const ReviewSubmission = () => {
   const isScreenTooSmall = useMediaQuery("(max-width:600px)");
   const { data: submission, loading: submissionLoading } = useSubmission({
     submissionId: params.recordId,
   });
-  const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
-  const [solutionIsBeingSubmitted, setSolutionIsBeingSubmitted] =
-    useState(false);
-  const [showConfirmationModal, setShowConfirmationModal] = useState(false);
-  const [newlyCreatedSubmission, setNewlyCreatedSubmission] = useState(null);
-
-  // @ts-ignore
-  const [state, dispatch] = useReducer(appReducer, initialState);
-  const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]) as AppContext;
 
   if (isScreenTooSmall) {
     return (
@@ -101,10 +66,9 @@ const TaskDetails = () => {
   }
 
   return submission && submission.length > 0 ? (
-    <AppDataContext.Provider value={contextValue}>
-      <LocalizationProvider dateAdapter={AdapterDayjs}>
-        <Helmet>
-          <style>{`
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <Helmet>
+        <style>{`
           iframe { border: none; }
           .container { max-width: none !important; }
           #custom-code1, #custom-code2, #custom-code3 {
@@ -118,40 +82,39 @@ const TaskDetails = () => {
           }
           .col-12 { padding: 0 !important; }
           `}</style>
-        </Helmet>
-        <Container
-          maxWidth={false}
-          style={{
-            padding: 0,
-            position: "absolute",
-            top: 0,
-            right: 0,
-            left: 0,
-            bottom: 0,
-          }}
-        >
-          <BasicTabs
-            tabItems={[
-              {
-                label: "Editor",
-                content: <Editor submission={submission} />,
-              },
-            ]}
-            leftActions={[]}
-            rightActions={[
-              <Button
-                variant="text"
-                color="info"
-                onClick={() => (window.location.href = "/")}
-              >
-                Cancel
-              </Button>,
-            ]}
-          />
-        </Container>
-      </LocalizationProvider>
-    </AppDataContext.Provider>
+      </Helmet>
+      <Container
+        maxWidth={false}
+        style={{
+          padding: 0,
+          position: "absolute",
+          top: 0,
+          right: 0,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <BasicTabs
+          tabItems={[
+            {
+              label: "Editor",
+              content: <Editor submission={submission} />,
+            },
+          ]}
+          leftActions={[]}
+          rightActions={[
+            <Button
+              variant="text"
+              color="info"
+              onClick={() => (window.location.href = "/")}
+            >
+              Cancel
+            </Button>,
+          ]}
+        />
+      </Container>
+    </LocalizationProvider>
   ) : null;
 };
 
-export default TaskDetails;
+export default ReviewSubmission;

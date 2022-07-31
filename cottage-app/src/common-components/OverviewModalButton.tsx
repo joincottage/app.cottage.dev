@@ -19,7 +19,6 @@ import {
   Tooltip,
   useMediaQuery,
 } from "@mui/material";
-import Zoom from "react-medium-image-zoom";
 import "react-medium-image-zoom/dist/styles.css";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { useLocalStorage } from "usehooks-ts";
@@ -27,6 +26,8 @@ import { useLocalStorage } from "usehooks-ts";
 interface OwnProps {
   task: any;
 }
+
+window.posthog = window.posthog || { capture: () => {} };
 
 const TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS = 10000;
 const TASK_OVERVIEW_DETAIL_PAGE_BASE_URL =
@@ -86,17 +87,40 @@ export default function OverviewModalButton({ task }: OwnProps) {
 
   return (
     <div>
+      <Tooltip
+        title={
+          <Box sx={{ display: "relative" }}>
+            <Typography variant="body1" sx={{ p: 1, textAlign: "center" }}>
+              Just click here to view the task overview again!
+            </Typography>
+            <CloseIcon
+              fontSize="small"
+              sx={{
+                position: "absolute",
+                top: "5px",
+                right: "5px",
+                cursor: "pointer",
+              }}
+              onClick={() => setShowTooltip(false)}
+            />
+          </Box>
+        }
+        placement="bottom-end"
+        arrow
+        open={showTooltip}
+      >
         <Button
           variant="contained"
           onClick={() => {
-            handleOpen();
-            
             // @ts-ignore
             window.posthog.capture("clicked 'Show task overview'");
+
+            handleOpen();
           }}
         >
           Show Task Overview
         </Button>
+      </Tooltip>
       <Modal
         open={open}
         onClose={handleClose}
@@ -118,7 +142,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
             sx={{
               position: "absolute" as "absolute",
               margin: "auto",
-              width: isOverviewModalTooBig ? "800px" : "1200px",
+              width: "800px",
               bgcolor: "background.paper",
               borderRadius: "6px",
               boxShadow: 24,
@@ -133,7 +157,40 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 <CloseIcon sx={{ color: "text.primary" }} />
               </Box>
             </Stack>
-            <Grid container spacing={2}>
+            <Grid
+              container
+              spacing={2}
+              sx={{
+                maxHeight: "70vh",
+                overflowY: "auto",
+                overflowX: "hidden",
+              }}
+            >
+              <Grid item xs={12}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    width: "100%",
+                  }}
+                >
+                  <Typography
+                    variant="h6"
+                    sx={{ color: "text.primary", textAlign: "center" }}
+                  >
+                    How To Get Started
+                  </Typography>
+                  <Stack sx={{ mt: 2 }} alignItems="center">
+                    <iframe
+                      src={task["Getting Started Video Embed"]}
+                      width="500"
+                      height="350"
+                      allowFullScreen
+                    />
+                  </Stack>
+                </Box>
+              </Grid>
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Figma Design Preview
@@ -159,15 +216,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                   Open Interactive Figma Design
                 </Button>
               </Grid>
-              <Grid
-                item
-                xs={6}
-                sx={{
-                  maxHeight: "70vh",
-                  overflowY: "auto",
-                  overflowX: "hidden",
-                }}
-              >
+              <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Description
                 </Typography>
