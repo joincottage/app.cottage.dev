@@ -6,7 +6,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import theme from "./theme";
 import CreateTask from "./pages/create-task";
-import TaskDetails from "./pages/review-submission";
+import TaskDetails from "./pages/task-details";
 import TaskOverview from "./pages/task-overview";
 import ReviewSubmission from "./pages/review-submission";
 
@@ -23,6 +23,8 @@ function renderPage(pageName: string) {
     console.error('Could not find <div id="roo"></div> in document');
     return;
   }
+
+  console.log(`rendering ${pageName}`);
 
   const PageComponent = components[pageName];
   if (!PageComponent) {
@@ -45,6 +47,6 @@ function renderPage(pageName: string) {
 window.Cottage = window.Cottage || {};
 window.Cottage.renderPage = renderPage;
 
-if (process.env.REACT_APP_TEST_ENV === "dev") {
-  renderPage("task-details");
-}
+//if (process.env.REACT_APP_TEST_ENV === "dev") {
+renderPage("task-details");
+//}

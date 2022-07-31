@@ -89,12 +89,6 @@ const TaskDetails = () => {
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [newlyCreatedSubmission, setNewlyCreatedSubmission] = useState(null);
 
-  // @ts-ignore
-  const [state, dispatch] = useReducer(appReducer, initialState);
-  const contextValue = useMemo(() => {
-    return { state, dispatch };
-  }, [state, dispatch]) as AppContext;
-
   useEffect(() => {
     if (!taskLoading && !submissionLoading && submission.length === 0) {
       // @ts-ignore
