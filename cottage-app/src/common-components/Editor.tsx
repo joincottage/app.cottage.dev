@@ -47,6 +47,7 @@ export default function Editor({ task, submission }: OwnProps) {
           submission[0]["Stackblitz Project ID"],
           {
             height: window.innerHeight,
+            forceEmbedLayout: false,
           }
         ));
     }

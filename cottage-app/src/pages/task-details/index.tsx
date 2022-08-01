@@ -301,7 +301,7 @@ const TaskDetails = () => {
               }}
             >
               <SaveIcon sx={{ mr: 1 }} />
-              Save Draft
+              Submit Draft
             </LoadingButton>,
             <LoadingButton
               loading={false}
