@@ -27,7 +27,7 @@ interface OwnProps {
   task: any;
 }
 
-window.posthog = window.posthog || { capture: () => {} };
+//window.posthog = window.posthog || { capture: () => {} };
 
 const TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS = 10000;
 const TASK_OVERVIEW_DETAIL_PAGE_BASE_URL =
@@ -65,7 +65,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
   };
   const handleOpenNewTab = () => {
     // @ts-ignore
-    window.posthog.capture("opened task details modal in new tab");
+    //window.posthog.capture("opened task details modal in new tab");
 
     window.open(
       `${TASK_OVERVIEW_DETAIL_PAGE_BASE_URL}?recordId=${task["Record ID"]}`,
@@ -113,7 +113,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
           variant="contained"
           onClick={() => {
             // @ts-ignore
-            window.posthog.capture("clicked 'Show task overview'");
+            //window.posthog.capture("clicked 'Show task overview'");
 
             handleOpen();
           }}

@@ -144,9 +144,9 @@ const TaskDetails = () => {
   useEffect(() => {
     if (!taskLoading && !submissionLoading && submission.length === 0) {
       // @ts-ignore
-      window.posthog.capture("competition start", {
-        taskRecordIdInAirtable: task[0]["Record ID"],
-      });
+      // window.posthog.capture("competition start", {
+      //   taskRecordIdInAirtable: task[0]["Record ID"],
+      // });
     }
   }, [submissionLoading, taskLoading]);
 
@@ -186,9 +186,9 @@ const TaskDetails = () => {
 
   const onSubmitSolution = async () => {
     // @ts-ignore
-    window.posthog.capture("clicked 'Submit solution'", {
-      taskRecordIdInAirtable: task[0]["Record ID"],
-    });
+    // window.posthog.capture("clicked 'Submit solution'", {
+    //   taskRecordIdInAirtable: task[0]["Record ID"],
+    // });
 
     setSolutionIsBeingSubmitted(true);
 
@@ -282,7 +282,7 @@ const TaskDetails = () => {
               color="info"
               onClick={() => {
                 // @ts-ignore
-                window.posthog.capture("clicked cancel");
+                //window.posthog.capture("clicked cancel");
 
                 window.location.href = "/";
               }}
@@ -295,7 +295,7 @@ const TaskDetails = () => {
               color="info"
               onClick={() => {
                 // @ts-ignore
-                window.posthog.capture("clicked 'Save draft'");
+                //window.posthog.capture("clicked 'Save draft'");
 
                 onSaveDraft();
               }}

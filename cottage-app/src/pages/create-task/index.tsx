@@ -123,15 +123,15 @@ const CreateTask = () => {
     );
 
     // @ts-ignore
-    window.posthog &&
-      window.posthog.capture("clicked 'Launch Competition'", {
-        taskRecordIdInAirtable: task[0]["Record ID"],
-      });
+    //window.posthog &&
+    //  window.posthog.capture("clicked 'Launch Competition'", {
+    //    taskRecordIdInAirtable: task[0]["Record ID"],
+    //  });
   };
 
   if (isScreenTooSmall) {
     // @ts-ignore
-    window.posthog && window.posthog.capture("cat-box");
+    //window.posthog && window.posthog.capture("cat-box");
 
     return (
       <Container maxWidth="sm" sx={{ mt: 3 }}>
@@ -215,7 +215,7 @@ const CreateTask = () => {
               color="info"
               onClick={() => {
                 // @ts-ignore
-                window.posthog.capture("clicked cancel");
+                //.capture("clicked cancel");
 
                 window.location.href = "/";
               }}
@@ -230,8 +230,8 @@ const CreateTask = () => {
                 onSaveDraft();
 
                 // @ts-ignore
-                window.posthog &&
-                  window.posthog.capture("clicked 'Save draft'");
+                //window.posthog &&
+                //  window.posthog.capture("clicked 'Save draft'");
               }}
             >
               <SaveIcon sx={{ mr: 1 }} />

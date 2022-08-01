@@ -64,7 +64,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
   };
   const handleOpenNewTab = () => {
     // @ts-ignore
-    window.posthog.capture("opened task details modal in new tab");
+    //window.posthog.capture("opened task details modal in new tab");
 
     window.open(
       `${TASK_OVERVIEW_DETAIL_PAGE_BASE_URL}?recordId=${task["Record ID"]}`,
@@ -92,7 +92,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
             handleOpen();
             
             // @ts-ignore
-            window.posthog.capture("clicked 'Show task overview'");
+            //window.posthog.capture("clicked 'Show task overview'");
           }}
         >
           Show Task Overview
@@ -151,7 +151,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                   sx={{ color: "text.primary", mt: 3, width: "350px" }}
                   onClick={() => {
                     // @ts-ignore
-                    window.posthog.capture("opened Figma design in new tab");
+                    //window.posthog.capture("opened Figma design in new tab");
 
                     window.open(task["Figma Direct Link"], "_blank");
                   }}
@@ -197,7 +197,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                                   checked={checked.includes(a)}
                                   onChange={() => {
                                     // @ts-ignore
-                                    window.posthog.capture(
+                                    //window.posthog.capture(
                                       "checked a checkbox in acceptance criteria"
                                     );
 
