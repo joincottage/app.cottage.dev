@@ -198,8 +198,8 @@ export default function OverviewModalButton({ task }: OwnProps) {
                                   onChange={() => {
                                     // @ts-ignore
                                     //window.posthog.capture(
-                                      "checked a checkbox in acceptance criteria"
-                                    );
+                                    //  "checked a checkbox in acceptance criteria"
+                                    //);
 
                                     return checked.includes(a)
                                       ? setChecked(
