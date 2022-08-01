@@ -1,18 +1,25 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import StackblitzSDK from "@stackblitz/sdk";
 import { Box } from "@mui/material";
+import doesAirtableItemExist from "../util/doesAirtableItemExist";
 
 interface OwnProps {
   task?: any[];
   submission?: any[];
 }
 
+let editorInitialized = false;
+window.StackblitzSDK = StackblitzSDK;
+
 export default function Editor({ task, submission }: OwnProps) {
-  console.log(`task: ${JSON.parse(task[0]["Contents"])}`);
-  const contents =
+  const contents = doesAirtableItemExist(submission)
+    ? JSON.parse(submission[0]["Contents"])
+    : JSON.parse(task[0]["Contents"]);
+  const dependencies =
     submission && submission.length > 0
-      ? JSON.parse(submission[0]["Contents"])
-      : JSON.parse(task[0]["Contents"]);
+      ? JSON.parse(submission[0]["Dependencies"])
+      : JSON.parse(task[0]["Dependencies"]);
+
   useEffect(() => {
     async function initializeEditorWithContent() {
       const vm = ((window as any).stackblitzVM =
@@ -23,12 +30,23 @@ export default function Editor({ task, submission }: OwnProps) {
             title: task[0]["Name"],
             description: "",
             template: "create-react-app",
-            dependencies: JSON.parse(task[0]["Dependencies"]),
+            dependencies,
           },
           {
             openFile: task[0]["Open File Name"],
             height: window.innerHeight,
-            forceEmbedLayout: true,
+            forceEmbedLayout: false,
+          }
+        ));
+    }
+
+    async function initializeEditorForExistingSubmission() {
+      const vm = ((window as any).stackblitzVM =
+        await StackblitzSDK.embedProjectId(
+          "editor",
+          submission[0]["Stackblitz Project ID"],
+          {
+            height: window.innerHeight,
           }
         ));
     }
@@ -40,10 +58,15 @@ export default function Editor({ task, submission }: OwnProps) {
         }));
     }
 
-    if (task) {
+    if (doesAirtableItemExist(submission) && !editorInitialized) {
+      initializeEditorForExistingSubmission();
+      editorInitialized = true;
+    } else if (doesAirtableItemExist(task) && !editorInitialized) {
       initializeEditorWithContent();
-    } else {
+      editorInitialized = true;
+    } else if (!editorInitialized) {
       initializeDefaultEditor();
+      editorInitialized = true;
     }
   }, [task]);
 

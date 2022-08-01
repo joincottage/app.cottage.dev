@@ -19,6 +19,8 @@ import useTask from "../../hooks/useTask";
 import axios from "axios";
 import { API_BASE_URL } from "../../constants";
 import getJWTToken from "../../util/getJWTToken";
+import useInterval from "../../hooks/useInterval";
+import doesAirtableItemExist from "../../util/doesAirtableItemExist";
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -31,19 +33,13 @@ const getLoggedInUserRecordID = () =>
   (window as any)?.logged_in_user?.airtable_record_id || "recdim56cUfKolPQd";
 
 const updateSubmissionInAirtable = async (
-  submission: any,
-  projectContents: string,
-  isDraft: boolean
+  submissionRecordId: string,
+  fields: Record<string, any>
 ): Promise<any> => {
   const response = await axios.patch(
-    `${API_BASE_URL}/submissions?recordId=${
-      submission["Record ID"]
-    }&jwtToken=${getJWTToken()}`,
+    `${API_BASE_URL}/submissions?recordId=${submissionRecordId}&jwtToken=${getJWTToken()}`,
     {
-      fields: {
-        Contents: projectContents,
-        IsDraft: `${isDraft}`,
-      },
+      fields,
     }
   );
 
@@ -53,24 +49,28 @@ const updateSubmissionInAirtable = async (
 const createSubmissionInAirtable = async (
   task: any,
   projectContents: string,
-  isDraft: boolean
+  isDraft: boolean,
+  previewUrl?: string
 ): Promise<any> => {
   const response = await axios.post(
     `${API_BASE_URL}/submissions?jwtToken=${getJWTToken()}`,
     {
       fields: {
-        Name: task["Name"],
+        Name: task[0]["Name"],
         Status: "Awaiting Review",
         Users: [getLoggedInUserRecordID()],
-        Tasks: [task["Record ID"]],
+        Tasks: [task[0]["Record ID"]],
         Contents: projectContents,
         IsDraft: `${isDraft}`,
+        "Stackblitz Project ID": previewUrl || "",
       },
     }
   );
 
   return response.data;
 };
+
+let submissionRecordId;
 
 // tslint:disable-next-line: cyclomatic-complexity
 const TaskDetails = () => {
@@ -88,6 +88,58 @@ const TaskDetails = () => {
     useState(false);
   const [showConfirmationModal, setShowConfirmationModal] = useState(false);
   const [newlyCreatedSubmission, setNewlyCreatedSubmission] = useState(null);
+
+  const [oldPreviewUrl, setOldPreviewUrl] = useState(null);
+  useInterval(() => {
+    async function checkPreviewUrl() {
+      if ((window as any).stackblitzVM) {
+        const currentPreviewUrl = await (
+          window as any
+        ).stackblitzVM.preview.getUrl();
+
+        if (currentPreviewUrl !== oldPreviewUrl) {
+          console.log(
+            `Detected previewUrl changed from ${oldPreviewUrl} to ${currentPreviewUrl}`
+          );
+          const projectId = currentPreviewUrl.slice(
+            8,
+            currentPreviewUrl.indexOf(".")
+          );
+          console.log(`Project ID extracted from previewUrl: ${projectId}`);
+          setOldPreviewUrl(currentPreviewUrl);
+
+          if (submissionRecordId || doesAirtableItemExist(submission)) {
+            console.log(
+              `Updating previewUrl for submission ${
+                submissionRecordId || submission[0]["Record ID"]
+              }`
+            );
+
+            await updateSubmissionInAirtable(
+              submissionRecordId || submission[0]["Record ID"],
+              {
+                "Stackblitz Project ID": projectId,
+              }
+            );
+          } else {
+            console.log("Creating new submission");
+
+            const projectContents = await (
+              window as any
+            ).stackblitzVM.getFsSnapshot();
+            const responseData = await createSubmissionInAirtable(
+              task,
+              JSON.stringify(projectContents, null, 2),
+              true,
+              projectId
+            );
+            submissionRecordId = responseData["Record ID"];
+          }
+        }
+      }
+    }
+    checkPreviewUrl();
+  }, 10000);
 
   useEffect(() => {
     if (!taskLoading && !submissionLoading && submission.length === 0) {
