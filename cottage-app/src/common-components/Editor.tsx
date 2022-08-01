@@ -59,7 +59,11 @@ export default function Editor({ task, submission }: OwnProps) {
         }));
     }
 
-    if (doesAirtableItemExist(submission) && !editorInitialized) {
+    if (
+      doesAirtableItemExist(submission) &&
+      submission[0]["Stackblitz Project ID"] &&
+      !editorInitialized
+    ) {
       initializeEditorForExistingSubmission();
       editorInitialized = true;
     } else if (doesAirtableItemExist(task) && !editorInitialized) {
