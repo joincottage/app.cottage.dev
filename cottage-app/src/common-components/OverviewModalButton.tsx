@@ -157,7 +157,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 <CloseIcon sx={{ color: "text.primary" }} />
               </Box>
             </Stack>
-            <Grid
+            {/* <Grid
               container
               spacing={2}
               sx={{
@@ -190,7 +190,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                     />
                   </Stack>
                 </Box>
-              </Grid>
+              </Grid> */}
               <Grid item xs={6}>
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Figma Design Preview
