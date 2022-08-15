@@ -157,7 +157,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 <CloseIcon sx={{ color: "text.primary" }} />
               </Box>
             </Stack>
-            {/* <Grid
+            <Grid
               container
               spacing={2}
               sx={{
@@ -166,7 +166,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 overflowX: "hidden",
               }}
             >
-              <Grid item xs={12}>
+              {/* <Grid item xs={12}>
                 <Box
                   sx={{
                     display: "flex",
