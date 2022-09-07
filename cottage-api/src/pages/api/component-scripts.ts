@@ -26,18 +26,22 @@ async function handler(
 
   switch (req.method) {
     case "GET": {
-      if (!req.query.componentName || !req.query.fileName) {
+      if (!req.query.fileName) {
         res.status(400).send("Bad Request");
         return;
       }
       const assetManifest = await axios.get(
-        `https://cottage-${req.query.componentName}.vercel.app/asset-manifest.json`
+        process.env.NEXT_TEST_APP_ENV === "dev"? 
+        "https://cottage-app-dev.vercel.app/asset-manifest.json" : 
+        "https://cottage-app.vercel.app/asset-manifest.json"
       );
       const componentInitScriptPath =
         assetManifest.data.files[req.query.fileName as string];
 
       const componentInitScript = await axios.get(
-        `https://cottage-${req.query.componentName}.vercel.app${componentInitScriptPath}`
+        process.env.NEXT_TEST_APP_ENV === "dev"? 
+        `https://cottage-app-dev.vercel.app${componentInitScriptPath}` : 
+        `https://cottage-app.vercel.app${componentInitScriptPath}`
       );
 
       res.status(200).send(componentInitScript.data);
