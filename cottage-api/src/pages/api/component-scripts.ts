@@ -31,7 +31,7 @@ async function handler(
         return;
       }
       const assetManifest = await axios.get(
-        process.env.NEXT_TEST_APP_ENV === "dev"? 
+        process.env.ENV === "dev"? 
         "https://cottage-app-dev.vercel.app/asset-manifest.json" : 
         "https://cottage-app.vercel.app/asset-manifest.json"
       );
@@ -39,7 +39,7 @@ async function handler(
         assetManifest.data.files[req.query.fileName as string];
 
       const componentInitScript = await axios.get(
-        process.env.NEXT_TEST_APP_ENV === "dev"? 
+        process.env.ENV === "dev"? 
         `https://cottage-app-dev.vercel.app${componentInitScriptPath}` : 
         `https://cottage-app.vercel.app${componentInitScriptPath}`
       );
