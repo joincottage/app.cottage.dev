@@ -17,10 +17,10 @@ import ConfirmationModal from "../../common-components/ConfirmationModal";
 import useSubmission from "../../hooks/useSubmission";
 import useTask from "../../hooks/useTask";
 import axios from "axios";
-import { API_BASE_URL } from "../../constants";
-import getJWTToken from "../../util/getJWTToken";
+import { API_URL } from "../../constants";
+import getJWTToken from "../../utils/getJWTToken";
 import useInterval from "../../hooks/useInterval";
-import doesAirtableItemExist from "../../util/doesAirtableItemExist";
+import doesAirtableItemExist from "../../utils/doesAirtableItemExist";
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -37,7 +37,7 @@ const updateSubmissionInAirtable = async (
   fields: Record<string, any>
 ): Promise<any> => {
   const response = await axios.patch(
-    `${API_BASE_URL}/submissions?recordId=${submissionRecordId}&jwtToken=${getJWTToken()}`,
+    `${API_URL}/api/airtable/submissions?recordId=${submissionRecordId}&jwtToken=${getJWTToken()}`,
     {
       fields,
     }
@@ -53,7 +53,7 @@ const createSubmissionInAirtable = async (
   previewUrl?: string
 ): Promise<any> => {
   const response = await axios.post(
-    `${API_BASE_URL}/submissions?jwtToken=${getJWTToken()}`,
+    `${API_URL}/api/airtable/submissions?jwtToken=${getJWTToken()}`,
     {
       fields: {
         Name: task[0]["Name"],

@@ -9,8 +9,10 @@ import CreateTask from "./pages/create-task";
 import TaskDetails from "./pages/task-details";
 import TaskOverview from "./pages/task-overview";
 import ReviewSubmission from "./pages/review-submission";
+import Portfolio from "./pages/portfolio";
 
 const components: Record<string, () => JSX.Element | null> = {
+  "portfolio": Portfolio,
   "create-task": CreateTask,
   "review-submission": ReviewSubmission,
   "task-details": TaskDetails,
@@ -46,5 +48,5 @@ window.Cottage = window.Cottage || {};
 window.Cottage.renderPage = renderPage;
 
 if (process.env.REACT_APP_TEST_ENV === "dev") {
-  renderPage("task-details");
+  renderPage("portfolio");
 }

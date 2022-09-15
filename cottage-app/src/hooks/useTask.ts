@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../constants";
-import getJWTToken from "../util/getJWTToken";
+import { API_URL } from "../constants";
+import getJWTToken from "../utils/getJWTToken";
 
 interface OwnProps {
   recordId: string;
@@ -23,7 +23,7 @@ export default function useSubmission({
   useEffect(() => {
     async function fetchData() {
       let response = await axios.get(
-        `${API_BASE_URL}/tasks?recordId=${recordId}&jwtToken=${jwtToken}`
+        `${API_URL}/api/airtable/tasks?recordId=${recordId}&jwtToken=${jwtToken}`
       );
 
       // Default behavior is to assume that the recordId url param corresponds to the "Tasks"
@@ -33,7 +33,7 @@ export default function useSubmission({
       if (response.data.length === 0) {
         // Get submission
         response = await axios.get(
-          `${API_BASE_URL}/submissions?submissionId=${recordId}&jwtToken=${jwtToken}`
+          `${API_URL}/api/airtable/submissions?submissionId=${recordId}&jwtToken=${jwtToken}`
         );
 
         if (!response.data[0]) {
@@ -42,7 +42,7 @@ export default function useSubmission({
 
         // Use record ID of the task from the submission to fetch the task
         response = await axios.get(
-          `${API_BASE_URL}/tasks?recordId=${response.data[0]["Record ID (from Tasks)"]}&jwtToken=${jwtToken}`
+          `${API_URL}/api/airtable/tasks?recordId=${response.data[0]["Record ID (from Tasks)"]}&jwtToken=${jwtToken}`
         );
       }
 

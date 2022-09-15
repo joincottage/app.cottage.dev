@@ -17,8 +17,8 @@ import ConfirmationModal from "./components/ConfirmationModal";
 import useInterval from "../../hooks/useInterval";
 import useTask from "../../hooks/useTask";
 import axios from "axios";
-import { API_BASE_URL } from "../../constants";
-import getJWTToken from "../../util/getJWTToken";
+import { API_URL } from "../../constants";
+import getJWTToken from "../../utils/getJWTToken";
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -37,7 +37,7 @@ const updateTaskInAirtable = async (
   isDraft: boolean
 ): Promise<any> => {
   const response = await axios.patch(
-    `${API_BASE_URL}/tasks?recordId=${
+    `${API_URL}/api/airtable/tasks?recordId=${
       task["Record ID"]
     }&jwtToken=${getJWTToken()}`,
     {

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 import StackblitzSDK from "@stackblitz/sdk";
 import { Box } from "@mui/material";
-import doesAirtableItemExist from "../util/doesAirtableItemExist";
+import doesAirtableItemExist from "../utils/doesAirtableItemExist";
 
 interface OwnProps {
   task?: any[];

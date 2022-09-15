@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../constants";
-import getJWTToken from "../util/getJWTToken";
+import { API_URL } from "../constants";
+import getJWTToken from "../utils/getJWTToken";
 
 interface OwnProps {
   recordId: string;
@@ -23,7 +23,7 @@ export default function useSubmission({
   useEffect(() => {
     async function fetchData() {
       let response = await axios.get(
-        `${API_BASE_URL}/submissions?recordId=${recordId}&loggedInUserRecordID=${loggedInUserRecordID}&jwtToken=${jwtToken}`
+        `${API_URL}/api/airtable/submissions?recordId=${recordId}&loggedInUserRecordID=${loggedInUserRecordID}&jwtToken=${jwtToken}`
       );
 
       // Default behavior is to assume that the recordId url param corresponds to the "Tasks"
@@ -33,7 +33,7 @@ export default function useSubmission({
       if (response.data.length === 0) {
         // Get submission assuming recordId is a submission record ID
         response = await axios.get(
-          `${API_BASE_URL}/submissions?submissionId=${recordId}&jwtToken=${jwtToken}`
+          `${API_URL}/api/airtable/submissions?submissionId=${recordId}&jwtToken=${jwtToken}`
         );
 
         // If we don't have any data in the response at this point, we assume that the user
