@@ -12,7 +12,7 @@ export default async function getDataFromAirtable({
   tableName,
   filterByFormula = "",
   view = "Grid View",
-  baseId = "appSa8zjXlkdl3mwg",
+  baseId = "appf3p4te7SoyVHB1",
   sort,
 }: RequiredParams): Promise<{ data: any[] }> {
   const data = await new Promise<any[]>((resolve, reject) => {

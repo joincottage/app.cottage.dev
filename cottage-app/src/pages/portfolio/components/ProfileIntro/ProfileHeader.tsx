@@ -29,7 +29,7 @@ export default function ProfileHeader({
   avatarUrl, // e.g. "https://storage.googleapis.com/cottage-assets/mock-avatar-image.png"
   username, // e.g. "@gavin"
   location, // e.g. "Ottawa, ON, Canada"
-  hourlyRate, // e.g. "$85/hr"
+  competitionSubmission, // e.g. "$85/hr"
   skills, // e.g. ["Product Management", "Copywriting", "Advisory", "Mentorship"]
   aboutMe,
   openModal,

@@ -57,7 +57,7 @@ async function handler(
 
       const { data: projects } = await getDataFromAirtable({
         tableName: "Projects",
-        filterByFormula: `{Record ID (from Developer)} = "${req.query.loggedInUserRecordId}"`,
+        filterByFormula: `{Record ID (from Developer Profiles)} = "${req.query.loggedInUserRecordId}"`,
         view: "Grid view",
       });
 

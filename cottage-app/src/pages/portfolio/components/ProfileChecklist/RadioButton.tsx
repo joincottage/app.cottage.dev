@@ -35,7 +35,7 @@ export default function RadioButton({
         icon={
           <RadioButtonUncheckedIcon
             sx={{
-              color: "#6366F1",
+              color: "rgb(38, 97, 246)",
             }}
           />
         }

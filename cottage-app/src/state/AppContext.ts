@@ -1,5 +1,5 @@
 import React, { Dispatch } from "react";
-import ProfileData from "../pages/profile/types/ProfileData";
+import ProfileData from "../pages/portfolio/types/ProfileData";
 
 export type AllClients = { name: "All" };
 export interface AppState {

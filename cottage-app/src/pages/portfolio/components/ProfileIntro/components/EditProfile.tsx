@@ -32,7 +32,7 @@ import {
     const [loading, setLoading] = useState(false);
   
     const [formData, setFormData] = useState(initialProfileData);
-    const { name, location, skills, hourlyRate, aboutMe } = formData;
+    const { name, location, skills, competitionSubmission, aboutMe } = formData;
     const onChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -48,7 +48,7 @@ import {
         "Freelancer Name": name,
         Location: location,
         Description: aboutMe,
-        "Hourly Rate": hourlyRate,
+        "Hourly Rate": competitionSubmission,
         Skills: skills,
       };
   
@@ -74,7 +74,7 @@ import {
       newProfileData.location = location;
       newProfileData.skills = skills;
       newProfileData.aboutMe = aboutMe;
-      newProfileData.hourlyRate = hourlyRate;
+      newProfileData.competitionSubmission = competitionSubmission;
   
       dispatch(
         setProfileData({
@@ -207,7 +207,7 @@ import {
             value={aboutMe}
             onChange={onChange}
           />
-          <Divider sx={{ my: 2 }} />
+          <Divider color="black" sx={{ my: 2, opacity: "0.1", }} />
           <Stack direction="row-reverse">
             <Button
               variant="contained"

@@ -192,7 +192,7 @@ import {
             value={link}
             onChange={(e) => setLink(e.target.value)}
           />
-          <Divider sx={{ my: 2 }} />
+          <Divider color="black" sx={{ my: 2, opacity: "0.1", }} />
           <Stack direction="row-reverse">
             <Button
               variant="contained"

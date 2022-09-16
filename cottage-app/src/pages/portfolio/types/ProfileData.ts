@@ -3,7 +3,7 @@ interface ProfileData {
     avatarUrl: string; // e.g. "https://storage.googleapis.com/cottage-assets/mock-avatar-image.png"
     username: string; // e.g. "@gavin"
     location: string; // e.g. "Ottawa, ON, Canada"
-    hourlyRate: string; // e.g. "$85/hr"
+    competitionSubmission: any[]; // e.g. "$85/hr"
     skills: string[]; // e.g. ["Product Management", "Copywriting", "Advisory", "Mentorship"]
     aboutMe: string; // e.g. "I'm the founder of..."
     projects: any[];

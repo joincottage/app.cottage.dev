@@ -112,7 +112,6 @@ export default function PortfolioProjects({
                 fontWeight: "500",
                 padding: "7px 16px",
                 borderRadius: "100px",
-                backgroundColor: "#6366F1",
               }}
               onClick={onAddProject}
             >
@@ -142,7 +141,7 @@ export default function PortfolioProjects({
         {profileData.projects.filter(
           (p) => !deletedProjects.includes(p.recordId)
         ).length > 0 ? (
-          <Divider sx={{ margin: "24px 0" }} />
+          <Divider color="black" sx={{ margin: "24px 0", opacity: "0.1",}} />
         ) : null}
 
         <Grid container spacing={4} sx={{ padding: "0 24px" }}>

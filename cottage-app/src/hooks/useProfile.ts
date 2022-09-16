@@ -39,13 +39,13 @@ export default function useProfile({ userRecordId }: OwnProps) {
           throw err;
         }
       }
-
+      
       const profileData = response.data.map((d: any) => ({
         name: d["Freelancer Name"],
         avatarUrl: d["Profile Picture"] ? d["Profile Picture"][0].url : "",
         username: d["Username"],
         location: d["Location"],
-        hourlyRate: d["Hourly Rate"],
+        competitionSubmission: d["Submissions (from Users)"],
         skills: d["Skills"],
         aboutMe: d["Description"],
         projects: d["Projects"] || [],

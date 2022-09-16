@@ -43,16 +43,18 @@ export default function Header({
         <CheckCircleOutlineIcon
           sx={{
             color: "#F5F5F5",
+            ml: "1px",
           }}
         />
         <CircularProgress
           size={20}
           sx={{
-            color: "#6366F1",
+            color: "rgb(38, 97, 246)",
             position: "absolute",
-            top: 2,
+            top: 3,
             left: 2,
             zIndex: 1,
+            ml: "1px",
           }}
           variant="determinate"
           value={(numProfileFieldsComplete / totalFields) * 100}
@@ -65,9 +67,10 @@ export default function Header({
             fontWeight: "500",
             color: "#FFFFFF",
             borderRadius: "4px",
-            background: "#6366F1",
+            background: "rgb(38, 97, 246)",
             padding: "2px 5px",
             letterSpacing: "2px",
+            pl: "7px",
           }}
         >
           {numProfileFieldsComplete}/{totalFields}

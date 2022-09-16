@@ -63,7 +63,7 @@ export default function ProfileIntro({
             location,
             skills,
             aboutMe,
-            hourlyRate,
+            competitionSubmission,
           }) => {
             if (newAvatarUrl) {
               setProfileData({
@@ -73,7 +73,7 @@ export default function ProfileIntro({
                 location,
                 skills,
                 aboutMe,
-                hourlyRate,
+                competitionSubmission,
               });
             } else {
               setProfileData({
@@ -82,7 +82,7 @@ export default function ProfileIntro({
                 location,
                 skills,
                 aboutMe,
-                hourlyRate,
+                competitionSubmission,
               });
             }
 
@@ -97,11 +97,13 @@ export default function ProfileIntro({
           hideEditProfileButton={hideEditProfileButton}
           />
         <Divider
+        color="black"
           sx={{
             margin: "24px 0",
+            opacity: "0.1",
           }}
         />
-        {/* About me */}
+        {/* Introduction */}
         <Box>
           <Typography
             variant="subtitle1"
@@ -113,7 +115,7 @@ export default function ProfileIntro({
               marginBottom: "12px",
             }}
           >
-            About me
+            About Me
           </Typography>
           <Typography
             variant="body1"

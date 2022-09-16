@@ -3,9 +3,9 @@ import React, { useState, useEffect, useContext } from "react";
 
 // Import any component you need from the Material UI packacge below.
 // List of available components can be viewed in the left sidebar of this page: https://mui.com/material-ui/react-autocomplete/
-import { Box, Container, Typography, Divider } from "@mui/material";
+import { Box, Container, Typography } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
-
+import Divider from '@mui/material/Divider';
 import RadioButton from "./RadioButton";
 import Header from "./Header";
 import ProfileData from "../../types/ProfileData";
@@ -63,7 +63,7 @@ export default function ProfileChecklist() {
           defaultProfileFields["Profile Picture"][0].url;
         break;
       }
-      case "hourlyRate": {
+      case "competitionSubmission": {
         isFieldDifferentFromDefault =
           profileData[fieldName] !== defaultProfileFields["Hourly Rate"];
         break;
@@ -95,7 +95,7 @@ export default function ProfileChecklist() {
     if (!isProfileFieldEmpty("avatarUrl")) {
       num++;
     }
-    if (!isProfileFieldEmpty("hourlyRate")) {
+    if (!isProfileFieldEmpty("competitionSubmission")) {
       num++;
     }
     if (!isProfileFieldEmpty("aboutMe")) {
@@ -131,8 +131,10 @@ export default function ProfileChecklist() {
             totalFields={TOTAL_NUM_PROFILE_FIELDS}
           />
           <Divider
+            color="black"
             sx={{
               margin: "16px 0",
+              opacity: "0.1",
             }}
           />
           <RadioButton
@@ -140,11 +142,11 @@ export default function ProfileChecklist() {
             completed={!isProfileFieldEmpty("avatarUrl")}
           />
           <RadioButton
-            text="Add hourly rate"
-            completed={!isProfileFieldEmpty("hourlyRate")}
+            text="Add competition submission(s)"
+            completed={!isProfileFieldEmpty("competitionSubmission")}
           />
           <RadioButton
-            text="Add introduction"
+            text="Add Introduction"
             completed={!isProfileFieldEmpty("aboutMe")}
           />
           <RadioButton
@@ -152,7 +154,7 @@ export default function ProfileChecklist() {
             completed={!isProfileFieldEmpty("skills")}
           />
           <RadioButton
-            text="Add projects"
+            text="Add portfolio project(s)"
             completed={!isProfileFieldEmpty("projects")}
           />
           {/* <RadioButton

@@ -33,7 +33,7 @@ const ANIM_DELAY = 500;
 const Portfolio = () => {
   const isMobileWidth = useMediaQuery("(max-width:600px)");
 
-  const userRecordId = 'recQfaUAzpwL1UQNt';
+  const userRecordId = 'recZYVAYbm01tOpaZ';
   const isPublicProfile = !!queryParams.publicProfileID;
 
   const { data: initialProfileData, loading } = useProfile({
@@ -96,7 +96,7 @@ const Portfolio = () => {
     setShowTooltip(true);
 
     navigator.clipboard.writeText(
-      `https://app.thirdwork.xyz/freelancer-profile?publicProfileID=${getLoggedInUserRecordID()}`
+      `https://app.cottage.dev/developer-profiles?publicProfileID=${getLoggedInUserRecordID()}`
     );
 
     setTimeout(() => setShowTooltip(false), TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS);
@@ -159,6 +159,9 @@ const Portfolio = () => {
                       color="primary"
                       startIcon={<LinkedInIcon />}
                       onClick={handleShareProfileClick}
+                      sx={{
+                        borderRadius: "100px",
+                      }}
                     >
                       Share Profile
                     </Button>
@@ -166,6 +169,9 @@ const Portfolio = () => {
                       variant="contained"
                       startIcon={<InsertLinkIcon />}
                       onClick={handleShareProfileClick}
+                      sx={{
+                        borderRadius: "100px",
+                      }}
                     >
                       Share Profile
                     </Button>

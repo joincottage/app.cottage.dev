@@ -6,7 +6,7 @@ export const GOOGLE_MAPS_API_KEY = "AIzaSyAebVcmFluyByzg2C865rud5as7p49whr8";
 
 export const API_URL =
 process.env.REACT_APP_TEST_ENV === "dev"
-    ? "https://3000-joincottage-appcottaged-q6l72zdlmga.ws-us65.gitpod.io"
+    ? "https://3002-joincottage-appcottaged-q6l72zdlmga.ws-us65.gitpod.io"
     : "https://cottage-api.vercel.app";
   
 export const getDefaultProfileFields = (): ProfileData => ({
