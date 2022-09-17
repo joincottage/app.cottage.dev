@@ -19,6 +19,7 @@ import useTask from "../../hooks/useTask";
 import axios from "axios";
 import { API_BASE_URL } from "../../constants";
 import getJWTToken from "../../util/getJWTToken";
+import CompetitionFormModalButton from "./components/CompetitionFormModalButton";
 
 const params: Record<string, any> = new Proxy(
   new URLSearchParams(window.location.search),
@@ -208,7 +209,7 @@ const CreateTask = () => {
               content: <Editor task={params.recordId ? task : null} />,
             },
           ]}
-          leftActions={[<OverviewModalButton task={task[0]} />]}
+          leftActions={[<OverviewModalButton task={task[0]} />, <CompetitionFormModalButton />]}
           rightActions={[
             <Button
               variant="text"
