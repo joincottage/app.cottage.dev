@@ -46,5 +46,5 @@ window.Cottage = window.Cottage || {};
 window.Cottage.renderPage = renderPage;
 
 if (process.env.REACT_APP_TEST_ENV === "dev") {
-  renderPage("task-details");
+  renderPage("create-task");
 }
