@@ -65,7 +65,7 @@ export default function ProfileChecklist() {
       }
       case "competitionSubmission": {
         isFieldDifferentFromDefault =
-          profileData[fieldName] !== defaultProfileFields["Hourly Rate"];
+          profileData[fieldName] !== defaultProfileFields["Submissions (from Users)"];
         break;
       }
       case "aboutMe": {

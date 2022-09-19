@@ -151,7 +151,6 @@ export default function CompetitionCard({ project, onDelete }: OwnProps) {
               padding: "7px 16px",
               border: "1px solid #E5E7EB",
               boxShadow: "0px 1px 2px rgba(0,0,0,.04)",
-              borderRadius: "100px",
               color: "#374151",
               fontSize: "14px",
               fontWeight: 500,

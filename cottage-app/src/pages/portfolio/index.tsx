@@ -33,7 +33,7 @@ const ANIM_DELAY = 500;
 const Portfolio = () => {
   const isMobileWidth = useMediaQuery("(max-width:600px)");
 
-  const userRecordId = 'recZYVAYbm01tOpaZ';
+  const userRecordId = 'rec4lNKjVyoi66F2s';
   const isPublicProfile = !!queryParams.publicProfileID;
 
   const { data: initialProfileData, loading } = useProfile({
@@ -159,9 +159,6 @@ const Portfolio = () => {
                       color="primary"
                       startIcon={<LinkedInIcon />}
                       onClick={handleShareProfileClick}
-                      sx={{
-                        borderRadius: "100px",
-                      }}
                     >
                       Share Profile
                     </Button>
@@ -170,7 +167,6 @@ const Portfolio = () => {
                       startIcon={<InsertLinkIcon />}
                       onClick={handleShareProfileClick}
                       sx={{
-                        borderRadius: "100px",
                       }}
                     >
                       Share Profile

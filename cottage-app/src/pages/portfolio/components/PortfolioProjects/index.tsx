@@ -111,7 +111,6 @@ export default function PortfolioProjects({
                 fontSize: "14px",
                 fontWeight: "500",
                 padding: "7px 16px",
-                borderRadius: "100px",
               }}
               onClick={onAddProject}
             >
@@ -126,7 +125,6 @@ export default function PortfolioProjects({
                 fontSize: "14px",
                 fontWeight: "500",
                 padding: "7px 16px",
-                borderRadius: "100px",
                 backgroundColor: "#FFFFFF",
                 border: "1px solid #E5E7EB",
                 boxShadow: "0px 1px 2px rgba(0, 0, 0, 0.04)",

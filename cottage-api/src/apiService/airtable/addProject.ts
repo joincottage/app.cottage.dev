@@ -20,7 +20,7 @@ export default async function addProject({
       "Project Title": title,
       "Project Description": description,
       Link: link,
-      Freelancer: [loggedInUsersRecordID],
+      Developer: [loggedInUsersRecordID],
     };
     if (path) {
       fields["Cover Image"] = [

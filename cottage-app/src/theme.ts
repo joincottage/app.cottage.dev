@@ -22,4 +22,15 @@ export default createTheme({
       secondary: "#ccc",
     },
   },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        // Name of the slot
+        root: {
+          borderRadius: "32px",
+          padding: "6px 20px",
+        },
+      },
+    },
+  },
 });

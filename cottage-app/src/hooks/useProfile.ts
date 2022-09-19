@@ -41,7 +41,7 @@ export default function useProfile({ userRecordId }: OwnProps) {
       }
       
       const profileData = response.data.map((d: any) => ({
-        name: d["Freelancer Name"],
+        name: d["Developer Name"],
         avatarUrl: d["Profile Picture"] ? d["Profile Picture"][0].url : "",
         username: d["Username"],
         location: d["Location"],

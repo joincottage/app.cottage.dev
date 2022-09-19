@@ -111,7 +111,6 @@ export default function CompetitionSubmissions({
                 fontSize: "14px",
                 fontWeight: "500",
                 padding: "7px 16px",
-                borderRadius: "100px",
               }}
               onClick={onAddProject}
             >

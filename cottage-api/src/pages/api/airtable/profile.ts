@@ -115,7 +115,7 @@ async function handler(
           res.json(records[0].fields);
         }
       );
-
+      
       break;
     }
     default: {

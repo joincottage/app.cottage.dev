@@ -43,7 +43,6 @@ export default function Tag({ tagname }: { tagname: string }) {
       </Icon> */}
       <Typography
         sx={{
-          fontFamily: "Inter",
           fontSize: "12px",
           fontWeight: "500",
         }}

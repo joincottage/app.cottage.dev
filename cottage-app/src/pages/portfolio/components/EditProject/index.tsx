@@ -15,6 +15,7 @@ import {
   import axios from "axios";
   import setProfileData from "../../../../state/actions/setProfileData";
   import { AppDataContext } from "../../../../state/AppContext";
+  import { alpha, styled } from '@mui/material/styles';
   
   interface OwnProps {
     onComplete: ({ project }: { project: any }) => void;
@@ -22,6 +23,22 @@ import {
     isModalForEdit: boolean;
     project: Project;
   }
+
+  const CustomTextField = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgb(204, 204, 204)',
+      },
+    },
+    "& .MuiOutlinedInput-root:hover": {
+      "& fieldset": {
+        borderColor: "rgb(38, 97, 246)",
+      }
+    },
+    input: {
+      color: "black",
+    },
+});
   
   export default function EditProject({
     onComplete,
@@ -166,7 +183,7 @@ import {
               </Box>
             )}
           </div>
-          <TextField
+          <CustomTextField
             label="Name"
             placeholder="ACME Inc."
             helperText="Give your project a short title (50 characters)"
@@ -175,7 +192,7 @@ import {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <TextField
+          <CustomTextField
             label="Description"
             placeholder="Designing an iOS mobile"
             helperText="Briefly explain your project (100 characters)"
@@ -183,7 +200,7 @@ import {
             value={desc}
             onChange={(e) => setDesc(e.target.value)}
           />
-          <TextField
+          <CustomTextField
             label="Add Link"
             placeholder="https://"
             helperText="Attach the project link which takes user to the main project details."

@@ -15,12 +15,29 @@ import {
   import useMediaQuery from "@mui/material/useMediaQuery";
   import setProfileData from "../../../../../state/actions/setProfileData";
   import { AppDataContext } from "../../../../../state/AppContext";
+  import { alpha, styled } from '@mui/material/styles';
   
   interface OwnProps {
     onComplete: ({ newAvatarUrl }: { newAvatarUrl: string }) => void;
     profileData: ProfileData;
     onDiscard: () => void;
   }
+
+  const CustomTextField = styled(TextField)({
+    '& .MuiOutlinedInput-root': {
+      '& fieldset': {
+        borderColor: 'rgb(204, 204, 204)',
+      },
+    },
+    "& .MuiOutlinedInput-root:hover": {
+      "& fieldset": {
+        borderColor: "rgb(38, 97, 246)",
+      }
+    },
+    input: {
+      color: "black",
+    },
+});
   
   export default function EditProfile({
     onComplete,
@@ -45,10 +62,9 @@ import {
       setLoading(true);
   
       const fields = {
-        "Freelancer Name": name,
+        "Developer Name": name,
         Location: location,
         Description: aboutMe,
-        "Hourly Rate": competitionSubmission,
         Skills: skills,
       };
   
@@ -167,7 +183,7 @@ import {
               </Box>
             )}
           </div>
-          <TextField
+          <CustomTextField
             label="Name"
             placeholder="John Smith"
             helperText="Tell us your name (50 characters)"
@@ -177,7 +193,7 @@ import {
             name="name"
             onChange={onChange}
           />
-          <TextField
+          <CustomTextField
             label="Location"
             placeholder="Paris"
             helperText="Tell us where you are"
@@ -186,7 +202,7 @@ import {
             value={location}
             onChange={onChange}
           />
-          <TextField
+          <CustomTextField
             label="Skills"
             placeholder="UI/UX Designer, Developer"
             helperText="Tell us what you do"
@@ -197,7 +213,7 @@ import {
             onChange={onChange}
           />
           
-          <TextField
+          <CustomTextField
             variant="outlined"
             placeholder="Write awesome things about yourself"
             multiline

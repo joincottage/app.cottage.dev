@@ -45,7 +45,6 @@ export default function SkillList({ skills }) {
         >
           <Typography
             sx={{
-              fontFamily: "Inter",
               fontSize: "12px",
               fontWeight: "500",
             }}
