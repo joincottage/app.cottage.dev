@@ -16,9 +16,8 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ConfirmationModal from "./components/ConfirmationModal";
 import useInterval from "../../hooks/useInterval";
 import useTask from "../../hooks/useTask";
-import axios from "axios";
-import { API_BASE_URL } from "../../constants";
-import getJWTToken from "../../util/getJWTToken";
+import useTaskBase from "../../hooks/useTaskBase"
+import {updateTaskInAirtable, createTaskInAirtable, getEditorContents} from "./utils"
 import CompetitionFormModalButton from "./components/CompetitionFormModalButton";
 
 const params: Record<string, any> = new Proxy(
@@ -31,43 +30,15 @@ const params: Record<string, any> = new Proxy(
 const getLoggedInUserRecordID = () =>
   (window as any)?.logged_in_user?.airtable_record_id || "recdim56cUfKolPQd";
 
-const updateTaskInAirtable = async (
-  task: any,
-  projectContents: string,
-  dependencies: string,
-  isDraft: boolean
-): Promise<any> => {
-  const response = await axios.patch(
-    `${API_BASE_URL}/tasks?recordId=${
-      task["Record ID"]
-    }&jwtToken=${getJWTToken()}`,
-    {
-      fields: {
-        Contents: projectContents,
-        Dependencies: dependencies,
-        IsDraft: `${isDraft}`,
-      },
-    }
-  );
-
-  return response.data;
-};
-
-const getEditorContents = async () => {
-  const files = await (window as any).stackblitzVM.getFsSnapshot();
-  const dependencies = await (window as any).stackblitzVM.getDependencies();
-
-  return { files, dependencies };
-};
-
 // tslint:disable-next-line: cyclomatic-complexity
 const CreateTask = () => {
   const isScreenTooSmall = useMediaQuery("(max-width:800px)");
 
-  const { data: task, loading: taskLoading } = useTask({
-    recordId: params.recordId,
-    loggedInUserRecordID: getLoggedInUserRecordID(),
-  });
+  // const { data: task, loading: taskLoading } = useTask({
+    // recordId: params.recordId,
+    // loggedInUserRecordID: getLoggedInUserRecordID(),
+  // });
+  const {data: task, loading: taskLoading} = useTaskBase({recordId: params.recordId})
 
   const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
   const [taskIsBeingSubmitted, setTaskIsBeingSubmitted] = useState(false);
@@ -209,7 +180,8 @@ const CreateTask = () => {
               content: <Editor task={params.recordId ? task : null} />,
             },
           ]}
-          leftActions={[<OverviewModalButton task={task[0]} />, <CompetitionFormModalButton />]}
+          // The task is an array with the first element being the task
+          leftActions={[<CompetitionFormModalButton task={task[0]}/>]}
           rightActions={[
             <Button
               variant="text"

@@ -3,7 +3,7 @@ import StackblitzSDK from "@stackblitz/sdk";
 import { Box } from "@mui/material";
 
 interface OwnProps {
-  task?: any[];
+  task: any[] | null;
 }
 
 export default function Editor({ task }: OwnProps) {

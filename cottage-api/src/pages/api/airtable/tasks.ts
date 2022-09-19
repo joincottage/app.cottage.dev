@@ -61,6 +61,7 @@ async function handler(
       break;
     }
     case "PATCH": {
+      console.log("Hit")
       if (!req.query.recordId || !req.body.fields) {
         res.status(400).send("Bad Request");
         return;
