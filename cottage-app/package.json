@@ -28,6 +28,7 @@
     "axios": "^0.27.1",
     "dayjs": "^1.11.1",
     "fast-equals": "^2.0.3",
+    "github-calendar": "^2.3.1",
     "lodash": "^4.17.21",
     "material-ui-popup-state": "^2.0.1",
     "moment": "^2.29.3",

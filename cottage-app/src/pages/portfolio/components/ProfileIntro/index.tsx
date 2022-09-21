@@ -5,6 +5,7 @@ import ProfileHeader from "./ProfileHeader";
 import Modal from "./Modal";
 import ProfileData from "../../types/ProfileData";
 import EditProfile from "./components/EditProfile";
+import { GithubHeatmap } from "../GithubHeatmap";
 
 interface OwnProps {
   profileData: ProfileData;
@@ -64,6 +65,7 @@ export default function ProfileIntro({
             skills,
             aboutMe,
             competitionSubmission,
+            username,
           }) => {
             if (newAvatarUrl) {
               setProfileData({
@@ -74,6 +76,7 @@ export default function ProfileIntro({
                 skills,
                 aboutMe,
                 competitionSubmission,
+                username,
               });
             } else {
               setProfileData({
@@ -83,6 +86,7 @@ export default function ProfileIntro({
                 skills,
                 aboutMe,
                 competitionSubmission,
+                username,
               });
             }
 
@@ -95,6 +99,9 @@ export default function ProfileIntro({
           {...profileData} 
           openModal={openModal}
           hideEditProfileButton={hideEditProfileButton}
+          />
+          <GithubHeatmap 
+          {...profileData}
           />
         <Divider
         color="black"

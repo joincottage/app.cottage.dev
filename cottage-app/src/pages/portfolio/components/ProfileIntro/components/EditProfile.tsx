@@ -49,7 +49,7 @@ import {
     const [loading, setLoading] = useState(false);
   
     const [formData, setFormData] = useState(initialProfileData);
-    const { name, location, skills, competitionSubmission, aboutMe } = formData;
+    const { name, location, skills, competitionSubmission, aboutMe, username } = formData;
     const onChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -64,8 +64,9 @@ import {
       const fields = {
         "Developer Name": name,
         Location: location,
-        Description: aboutMe,
+        "About Me": aboutMe,
         Skills: skills,
+        Username: username,
       };
   
       const newProfileData: any = {};
@@ -91,7 +92,8 @@ import {
       newProfileData.skills = skills;
       newProfileData.aboutMe = aboutMe;
       newProfileData.competitionSubmission = competitionSubmission;
-  
+      newProfileData.username = username;
+
       dispatch(
         setProfileData({
           ...profileData,
@@ -194,6 +196,15 @@ import {
             onChange={onChange}
           />
           <CustomTextField
+          label="Username"
+          placeholder="johnsmith"
+          helperText="Tell us your username (50 characters)"
+          disabled={loading}
+          value={username}
+          name="username"
+          onChange={onChange}
+        />
+          <CustomTextField
             label="Location"
             placeholder="Paris"
             helperText="Tell us where you are"
@@ -212,9 +223,7 @@ import {
             value={skills}
             onChange={onChange}
           />
-          
           <CustomTextField
-            variant="outlined"
             placeholder="Write awesome things about yourself"
             multiline
             rows={6}

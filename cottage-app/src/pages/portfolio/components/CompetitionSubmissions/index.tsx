@@ -91,7 +91,7 @@ export default function CompetitionSubmissions({
           p: 2,
         }}
       >
-        <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+        <Box sx={{ display: "flex", gap: "12px", alignItems: "center", }}>
           <Typography
             variant="h5"
             sx={{
@@ -103,7 +103,7 @@ export default function CompetitionSubmissions({
           >
             Competition Submissions
           </Typography>
-          {!hideNewProjectButton && (
+          {/*{!hideNewProjectButton && (
             <Button
               variant="contained"
               startIcon={<AddIcon />}
@@ -116,7 +116,7 @@ export default function CompetitionSubmissions({
             >
               New Submission
             </Button>
-          )}
+          )}*/}
           {/* {profileData.projects.length > 0 ? (
             <Button
               variant="contained"

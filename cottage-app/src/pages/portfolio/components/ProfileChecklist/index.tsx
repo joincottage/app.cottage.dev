@@ -3,7 +3,7 @@ import React, { useState, useEffect, useContext } from "react";
 
 // Import any component you need from the Material UI packacge below.
 // List of available components can be viewed in the left sidebar of this page: https://mui.com/material-ui/react-autocomplete/
-import { Box, Container, Typography } from "@mui/material";
+import { Box, Container, Tooltip, Button, Typography, Stack } from "@mui/material";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import Divider from '@mui/material/Divider';
 import RadioButton from "./RadioButton";
@@ -11,6 +11,10 @@ import Header from "./Header";
 import ProfileData from "../../types/ProfileData";
 import { getDefaultProfileFields } from "../../../../constants";
 import { AppDataContext } from "../../../../state/AppContext";
+import queryParams from "../../../../scripts/misc/queryParams";
+import InsertLinkIcon from '@mui/icons-material/InsertLink';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import getLoggedInUserRecordID from "../../../../utils/getLoggedInUserRecordID";
 
 const Paper = ({
   children,
@@ -70,8 +74,8 @@ export default function ProfileChecklist() {
       }
       case "aboutMe": {
         isFieldDifferentFromDefault =
-          profileData[fieldName].trim() !==
-          defaultProfileFields["Description"].trim();
+          profileData[fieldName] !==
+          defaultProfileFields["About Me"]
         break;
       }
       case "skills": {
@@ -79,7 +83,7 @@ export default function ProfileChecklist() {
           profileData[fieldName] !== defaultProfileFields["Skills"];
         break;
       }
-      case "projects": {
+      case "username": {
         isFieldDifferentFromDefault = !isFieldBlank;
         break;
       }
@@ -104,7 +108,7 @@ export default function ProfileChecklist() {
     if (!isProfileFieldEmpty("skills")) {
       num++;
     }
-    if (!isProfileFieldEmpty("projects")) {
+    if (!isProfileFieldEmpty("username")) {
       num++;
     }
     // if (!isProfileFieldEmpty("education")) {
@@ -112,17 +116,75 @@ export default function ProfileChecklist() {
     // }
     setNumProfileFieldsComplete(num);
   }, [profileData]);
+  const isPublicProfile = !!queryParams.publicProfileID;
+  const [showTooltip, setShowTooltip] = useState(false);
+  const TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS = 10000;
+  const handleShareProfileClick = () => {
+    setShowTooltip(true);
 
-  return numProfileFieldsComplete < TOTAL_NUM_PROFILE_FIELDS ? (
+    navigator.clipboard.writeText(
+      `https://app.cottage.dev/developer-profiles?publicProfileID=${getLoggedInUserRecordID()}`
+    );
+
+    setTimeout(() => setShowTooltip(false), TOOLTIP_DISPLAY_TIME_PERIOD_MILLIS);
+  };
+
+  const handleShareProfileClickLinkedIn = () => {
+    window.open(`https://www.LinkedIn.com/shareArticle?mini=true&url=https://app.cottage.dev/developer-profiles?publicProfileID=${getLoggedInUserRecordID()}`, '_blank').focus();
+  };
+
+  return (
     <Box>
-      <Typography variant="h6" sx={{ fontSize: "16px", textAlign: "center", }}>
+      {!isPublicProfile && (
+                  <Tooltip
+                    title={
+                      <Box sx={{ display: "relative" }}>
+                        <Typography
+                          variant="body1"
+                          sx={{ textAlign: "center" }}
+                        >
+                          Public profile URL copied to clipboard!
+                        </Typography>
+                      </Box>
+                    }
+                    placement="bottom-end"
+                    arrow
+                    open={showTooltip}
+                  >
+                    <Stack
+                      direction="column"
+                      sx={{ mt: 1 }}
+                      spacing={1}
+                      justifyContent="space-around"
+                    >
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      startIcon={<LinkedInIcon />}
+                      onClick={handleShareProfileClickLinkedIn}
+                    >
+                      Share
+                    </Button>
+                    <Button
+                      variant="contained"
+                      startIcon={<InsertLinkIcon />}
+                      onClick={handleShareProfileClick}
+                    >
+                        Share
+                    </Button>
+                    </Stack>
+                  </Tooltip>
+                )}
+      {numProfileFieldsComplete < TOTAL_NUM_PROFILE_FIELDS && (
+      <>
+      <Typography variant="h6" sx={{ fontSize: "16px", textAlign: "center", mt: "1rem", }}>
         Make an impression!
       </Typography>
       <Typography
         variant="body1"
         sx={{ fontSize: "14px", color: "#6B7280", mb: 2, textAlign: "center", }}
       >
-        Don't forget to complete your profile so your future employer can find you sooner.
+        Don't forget to complete your portfolio so your future employer can find you sooner.
       </Typography>
       <Paper>
         <Box sx={{ p: 2 }}>
@@ -138,24 +200,24 @@ export default function ProfileChecklist() {
             }}
           />
           <RadioButton
-            text="Add profile photo"
+            text="Portfolio Photo"
             completed={!isProfileFieldEmpty("avatarUrl")}
           />
           <RadioButton
-            text="Add competition submission(s)"
+            text="Competition Submission(s)"
             completed={!isProfileFieldEmpty("competitionSubmission")}
           />
           <RadioButton
-            text="Add Introduction"
+            text="About Me"
             completed={!isProfileFieldEmpty("aboutMe")}
           />
           <RadioButton
-            text="Add skills"
+            text="Skills"
             completed={!isProfileFieldEmpty("skills")}
           />
           <RadioButton
-            text="Add portfolio project(s)"
-            completed={!isProfileFieldEmpty("projects")}
+            text="Github Username"
+            completed={!isProfileFieldEmpty("username")}
           />
           {/* <RadioButton
               text="Add education"
@@ -163,6 +225,7 @@ export default function ProfileChecklist() {
             /> */}
         </Box>
       </Paper>
-    </Box>
-  ) : null;
+      </>
+      )}
+    </Box>)
 }

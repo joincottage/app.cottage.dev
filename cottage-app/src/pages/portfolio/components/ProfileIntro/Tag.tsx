@@ -3,8 +3,17 @@ import { Icon, Box, Typography } from "@mui/material";
 import LocalCafeOutlinedIcon from "@mui/icons-material/LocalCafeOutlined";
 import ViewInArOutlinedIcon from "@mui/icons-material/ViewInArOutlined";
 import ModeEditOutlineOutlinedIcon from "@mui/icons-material/ModeEditOutlineOutlined";
+import Avatar from '@mui/material/Avatar';
+import ProgressiveImage from "react-progressive-graceful-image";
+import Fade from "@mui/material";
+import cssLogo from "./cssLogo.jpeg";
+import javascriptLogo from "./JavaScriptLogo.png";
+import reactLogo from "./reactLogo.png";
+import htmlLogo from "./htmlLogo.png";
 
 const iconstyle = { width: "12px", height: "12px" };
+
+
 
 export default function Tag({ tagname }: { tagname: string }) {
   const coffe = <LocalCafeOutlinedIcon style={iconstyle} />;
@@ -21,7 +30,21 @@ export default function Tag({ tagname }: { tagname: string }) {
     "success",
     "warning",
   ];
-
+  
+  const testFunc = (tagname) => {
+  if (tagname === "HTML") {
+    return htmlLogo; 
+  };
+  if (tagname === "CSS") {
+    return cssLogo; 
+  };
+  if (tagname === "JavaScript") {
+    return javascriptLogo; 
+  };
+  if (tagname === "React") {
+    return reactLogo; 
+  };
+};
   // console.log(getTagWidth(tagname, 'Inter'));
   return (
     <Box
@@ -35,12 +58,7 @@ export default function Tag({ tagname }: { tagname: string }) {
         flex: "0 0 auto",
       }}
     >
-      {/* <Icon color={`${randomListItem(colorlist)}`} sx={{
-        padding: 0, 
-        margin: 0, 
-        fontSize: '12px'}}>
-        {randomListItem(iconlist)}
-      </Icon> */}
+      {/*<Avatar src={testFunc(tagname)} sx={{ width: 30, height: 30 }}/>*/}
       <Typography
         sx={{
           fontSize: "12px",

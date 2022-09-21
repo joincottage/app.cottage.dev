@@ -51,7 +51,7 @@ export default function ProfileHeader({
     >
       {/* Avatar */}
       <Grid item>
-        <ProgressiveImage src={stockPhoto} placeholder="">
+        <ProgressiveImage src={avatarUrl} placeholder="">
           {(src) => (
             <div
               style={{

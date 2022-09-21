@@ -47,7 +47,7 @@ export default function useProfile({ userRecordId }: OwnProps) {
         location: d["Location"],
         competitionSubmission: d["Submissions (from Users)"],
         skills: d["Skills"],
-        aboutMe: d["Description"],
+        aboutMe: d["About Me"],
         projects: d["Projects"] || [],
         education: d["Education"] || [],
         recordId: d["Record ID"],
