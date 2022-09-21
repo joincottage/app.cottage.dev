@@ -177,7 +177,7 @@ export default function OverviewModalButton({ task }: OwnProps) {
                 >
                   {task.Description}
                 </Typography>
-                <Divider sx={{ mt: 2, mb: 2 }} />
+                <Divider color="black" sx={{ mt: 2, mb: 2, opacity: "0.1", }} />
                 <Typography variant="h6" sx={{ color: "text.primary" }}>
                   Acceptance Criteria
                 </Typography>

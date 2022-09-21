@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { API_BASE_URL } from "../constants";
-import getJWTToken from "../util/getJWTToken";
+import { API_URL } from "../constants";
+import getJWTToken from "../utils/getJWTToken";
 
 interface OwnProps {
   recordId: string;
@@ -19,7 +19,7 @@ export default function useSubmission({ recordId }: OwnProps) {
   useEffect(() => {
     async function fetchData() {
       const response = await axios.get(
-        `${API_BASE_URL}/tasks?recordId=${recordId}&jwtToken=${jwtToken}`
+        `${API_URL}/api/airtable/tasks?recordId=${recordId}&jwtToken=${jwtToken}`
       );
 
       setData(response.data);
