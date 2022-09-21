@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^1.5.0",
+    "@cottage-software-inc/api-library": "^0.0.9",
     "@draft-js-plugins/editor": "^4.1.1",
     "@draft-js-plugins/linkify": "^4.2.0",
     "@emotion/react": "^11.8.0",

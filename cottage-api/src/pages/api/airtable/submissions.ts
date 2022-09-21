@@ -6,26 +6,35 @@ import runMiddleware from "src/utils/runMiddleware";
 import { withSentry } from "@sentry/nextjs";
 import corsOptions from "../../../apiService/corsOptions";
 import getDataFromAirtable from "src/apiService/airtable/getDataFromAirtable";
+// @ts-ignore
+import * as Cottage from "@cottage-software-inc/api-library";
+import appConfig from "src/config";
+
+Cottage.AirtableUtils.init({
+  devBaseId: appConfig.devBaseId,
+  prodBaseId: appConfig.prodBaseId,
+});
 
 async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  await runMiddleware(req, res, cors(corsOptions));
-
-  // const isValidUser = await validateUser(req.query.jwtToken as string);
-  // if (!isValidUser) {
-  //   res.status(401).send("Unauthorized");
-  //   return;
-  // }
+  await Cottage.runCottageMiddleware({
+    appName: appConfig.appName,
+    prodUrl: "",
+    requireSoftrAuth: true,
+    req,
+    res,
+  });
 
   switch (req.method) {
     case "GET": {
       if (req.query.submissionId) {
-        const { data: submission } = await getDataFromAirtable({
-          tableName: "Submissions",
-          filterByFormula: `{Record ID} = '${req.query.submissionId}'`,
-        });
+        const { data: submission } =
+          await Cottage.AirtableUtils.getDataFromAirtable({
+            tableName: "Submissions",
+            filterByFormula: `{Record ID} = '${req.query.submissionId}'`,
+          });
 
         res.json(submission);
 
@@ -37,10 +46,11 @@ async function handler(
         return;
       }
 
-      const { data: submission } = await getDataFromAirtable({
-        tableName: "Submissions",
-        filterByFormula: `AND({Record ID (from Users)} = '${req.query.loggedInUserRecordID}', {Record ID (from Tasks)} = '${req.query.recordId}')`,
-      });
+      const { data: submission } =
+        await Cottage.AirtableUtils.getDataFromAirtable({
+          tableName: "Submissions",
+          filterByFormula: `AND({Record ID (from Users)} = '${req.query.loggedInUserRecordID}', {Record ID (from Tasks)} = '${req.query.recordId}')`,
+        });
 
       res.json(submission);
 
