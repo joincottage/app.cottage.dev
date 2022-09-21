@@ -18,7 +18,7 @@ import useSubmission from "../../hooks/useSubmission";
 import useTask from "../../hooks/useTask";
 import axios from "axios";
 import { API_BASE_URL } from "../../constants";
-import getJWTToken from "../../util/getJWTToken";
+import { getJWTToken } from "@cottage-software-inc/client-library/lib/lib/helpers";
 import useInterval from "../../hooks/useInterval";
 import doesAirtableItemExist from "../../util/doesAirtableItemExist";
 

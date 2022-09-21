@@ -16,8 +16,12 @@ import RocketLaunchIcon from "@mui/icons-material/RocketLaunch";
 import ConfirmationModal from "./components/ConfirmationModal";
 import useInterval from "../../hooks/useInterval";
 import useTask from "../../hooks/useTask";
-import useTaskBase from "../../hooks/useTaskBase"
-import {updateTaskInAirtable, createTaskInAirtable, getEditorContents} from "./utils"
+import useTaskBase from "../../hooks/useTaskBase";
+import {
+  updateTaskInAirtable,
+  createTaskInAirtable,
+  getEditorContents,
+} from "./utils";
 import CompetitionFormModalButton from "./components/CompetitionFormModalButton";
 
 const params: Record<string, any> = new Proxy(
@@ -35,10 +39,12 @@ const CreateTask = () => {
   const isScreenTooSmall = useMediaQuery("(max-width:800px)");
 
   // const { data: task, loading: taskLoading } = useTask({
-    // recordId: params.recordId,
-    // loggedInUserRecordID: getLoggedInUserRecordID(),
+  // recordId: params.recordId,
+  // loggedInUserRecordID: getLoggedInUserRecordID(),
   // });
-  const {data: task, loading: taskLoading} = useTaskBase({recordId: params.recordId})
+  const { data: task, loading: taskLoading } = useTaskBase({
+    recordId: params.recordId,
+  });
 
   const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
   const [taskIsBeingSubmitted, setTaskIsBeingSubmitted] = useState(false);
@@ -145,7 +151,7 @@ const CreateTask = () => {
   }
 
   return taskLoading ? null : (
-    <LocalizationProvider dateAdapter={AdapterDayjs}>
+    <div>
       <Helmet>
         <style>{`
           iframe { border: none; }
@@ -181,7 +187,7 @@ const CreateTask = () => {
             },
           ]}
           // The task is an array with the first element being the task
-          leftActions={[<CompetitionFormModalButton task={task[0]}/>]}
+          leftActions={[<CompetitionFormModalButton task={task[0]} />]}
           rightActions={[
             <Button
               variant="text"
@@ -229,7 +235,7 @@ const CreateTask = () => {
           onClose={() => setShowConfirmationModal(false)}
         />
       </Container>
-    </LocalizationProvider>
+    </div>
   );
 };
 

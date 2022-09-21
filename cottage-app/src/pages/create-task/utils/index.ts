@@ -1,6 +1,6 @@
 import axios from "axios"
 import { API_BASE_URL } from "../../../constants"
-import getJWTToken from "../../../util/getJWTToken";
+import {getJWTToken} from "@cottage-software-inc/client-library/lib/lib/helpers";
 import { Task } from "../types/Task"
 
 export const updateTaskInAirtable = async (
