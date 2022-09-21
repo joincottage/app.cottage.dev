@@ -37,6 +37,13 @@ import {
     input: {
       color: "black",
     },
+    textarea: {
+      color: "black",
+    },
+    ".MuiOutlinedInput-input:-webkit-autofill": {
+      boxShadow: "0 0 0 100px white inset",
+      textFillColor: "black",
+    }
 });
   
   export default function EditProfile({
@@ -199,6 +206,7 @@ import {
           label="Username"
           placeholder="johnsmith"
           helperText="Tell us your username (50 characters)"
+          required
           disabled={loading}
           value={username}
           name="username"
@@ -224,11 +232,13 @@ import {
             onChange={onChange}
           />
           <CustomTextField
+            label="About Me"
             placeholder="Write awesome things about yourself"
             multiline
+            required
             rows={6}
-            disabled={loading}
             name="aboutMe"
+            disabled={loading}
             value={aboutMe}
             onChange={onChange}
           />
