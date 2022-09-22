@@ -11,7 +11,7 @@ async function handler(
   await Cottage.runCottageMiddleware({
     appName: appConfig.appName,
     prodUrl: "",
-    requireSoftrAuth: true,
+    requireSoftrAuth: false,
     req,
     res,
   });
