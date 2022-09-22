@@ -8,6 +8,11 @@ export default createTheme({
       main: "rgb(38, 97, 246)",
       dark: "rgb(38, 97, 246)",
     },
+    secondary: {
+      light: "rgb(38, 97, 246)",
+      main: "#fff",
+      dark: "rgb(38, 97, 246)",
+    },
     background: {
       default: "rgb(32, 35, 39)",
       paper: "rgb(32, 35, 39)",

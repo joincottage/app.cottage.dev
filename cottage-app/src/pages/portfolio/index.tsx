@@ -118,7 +118,7 @@ const Portfolio = () => {
             <div>
               <Box sx={{ mt: 4,  }}>
                 {!loading && (
-                  <TotalWinnings />
+                  <TotalWinnings profileData={profileData}/>
                 )}
               </Box>
             </div>

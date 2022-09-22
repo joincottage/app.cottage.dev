@@ -9,6 +9,9 @@ interface ProfileData {
     projects: any[];
     education: any[];
     recordId: string;
+    totalSubmissions: number;
+    totalWon: number;
+    totalWinnings: number;
   }
   
   // https://www.geeksforgeeks.org/what-is-export-default-in-javascript/

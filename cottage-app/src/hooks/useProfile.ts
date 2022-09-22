@@ -51,6 +51,9 @@ export default function useProfile({ userRecordId }: OwnProps) {
         projects: d["Projects"] || [],
         education: d["Education"] || [],
         recordId: d["Record ID"],
+        totalSubmissions: d["Total Number of Submissions (from Users)"],
+        totalWon: d["Total Number of Submissions Won (from Users)"],
+        totalWinnings: d["Total Winnings"],
       }));
 
       profileData[0].projects = profileData[0].projects.map((p: any) =>

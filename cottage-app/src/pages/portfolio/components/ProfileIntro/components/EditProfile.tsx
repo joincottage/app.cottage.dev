@@ -56,7 +56,7 @@ import {
     const [loading, setLoading] = useState(false);
   
     const [formData, setFormData] = useState(initialProfileData);
-    const { name, location, skills, competitionSubmission, aboutMe, username } = formData;
+    const { name, location, skills, aboutMe, username } = formData;
     const onChange = (e) => {
       setFormData({ ...formData, [e.target.name]: e.target.value });
     };
@@ -98,7 +98,6 @@ import {
       newProfileData.location = location;
       newProfileData.skills = skills;
       newProfileData.aboutMe = aboutMe;
-      newProfileData.competitionSubmission = competitionSubmission;
       newProfileData.username = username;
 
       dispatch(
