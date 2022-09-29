@@ -43,12 +43,13 @@ export default function ProfileIntro({
 }: OwnProps) {
   const [modal, setModal] = useState(false);
   const [profileData, setProfileData] = useState(initialProfileData);
-
+  const [selectedIndex, setSelectedIndex] = React.useState();
   const openModal = () => {
     setModal(true);
   };
 
   const closeModal = () => {
+    setSelectedIndex(undefined);
     setModal(false);
   };
 
@@ -64,6 +65,7 @@ export default function ProfileIntro({
             location,
             skills,
             aboutMe,
+            projects,
             competitionSubmission,
             username,
           }) => {
@@ -75,6 +77,7 @@ export default function ProfileIntro({
                 location,
                 skills,
                 aboutMe,
+                projects,
                 competitionSubmission,
                 username,
               });
@@ -85,6 +88,7 @@ export default function ProfileIntro({
                 location,
                 skills,
                 aboutMe,
+                projects,
                 competitionSubmission,
                 username,
               });
@@ -99,6 +103,8 @@ export default function ProfileIntro({
           {...profileData} 
           openModal={openModal}
           hideEditProfileButton={hideEditProfileButton}
+          setSelectedIndex={setSelectedIndex}
+          selectedIndex={selectedIndex}
           />
           <GithubHeatmap 
           {...profileData}

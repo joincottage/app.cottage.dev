@@ -18,7 +18,7 @@ export const GithubHeatmap = ({
     
     
     return (
-       <Container sx={{ margin: "1.4rem 0rem 1.8rem 0rem",}}>
+       <Container sx={{ margin: "1.3rem 0rem 1.8rem 0rem",}}>
           <div className="calendar" style={{ padding: ".4rem .5rem 0rem .5rem" }}></div>
        </Container>
                

@@ -8,7 +8,7 @@ import {
   } from "@mui/material";
   import React, { useContext, useState } from "react";
   import { API_URL } from "../../../../constants";
-  import { formatProjectAPIResponse } from "../../../../utils/formatters";
+  import { formatProjectAPIResponse } from "../../../../utils/projectFormatters";
   import getLoggedInUserRecordID from "../../../../utils/getLoggedInUserRecordID";
   import Project from "../../types/Project";
   import useMediaQuery from "@mui/material/useMediaQuery";
@@ -96,12 +96,12 @@ import {
         );
           // Update profile checklist
           const projectData = formatProjectAPIResponse(response.data);
-          dispatch(
-            setProfileData({
-              ...profileData,
-              projects: [...profileData.projects, projectData],
-            })
-          );
+        dispatch(
+          setProfileData({
+            ...profileData,
+            projects: [...profileData.projects, projectData],
+          })
+        );
       }
   
       const projectData = formatProjectAPIResponse(response.data);

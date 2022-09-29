@@ -1,11 +1,11 @@
-export const formatProjectAPIResponse = (p: any) => ({
+export const formatSubmissionsAPIResponse = (p: any) => ({
     demoImage:
-      p["Cover Image"] && p["Cover Image"].length > 0
-        ? p["Cover Image"][0].url
+      p["UX Design Images (from Tasks)"] && p["UX Design Images (from Tasks)"].length > 0
+        ? p["UX Design Images (from Tasks)"][0].url
         : null,
-    name: p["Project Title"],
-    description: p["Project Description"],
-    link: p["Link"],
+    name: p["Name"],
+    description: p["Status"],
+    link: p["Stackblitz Project Link"],
     recordId: p["Record ID"],
   });
   

@@ -55,12 +55,19 @@ async function handler(
         view: "Grid view",
       });
 
+      const { data: competitionSubmission } = await getDataFromAirtable({
+        tableName: "Submissions",
+        filterByFormula: `{Record ID (from Users)} = "${req.query.loggedInUserRecordId}"`,
+        view: "Grid view",
+      });
+
       const { data: projects } = await getDataFromAirtable({
         tableName: "Projects",
         filterByFormula: `{Record ID (from Developer Profiles)} = "${req.query.loggedInUserRecordId}"`,
         view: "Grid view",
       });
 
+      developerProfile[0]["Submissions"] = competitionSubmission;
       developerProfile[0]["Projects"] = projects;
 
       res.json(developerProfile);
@@ -69,6 +76,7 @@ async function handler(
     }
     case "POST": {
       const fields = req.body.fields;
+      
       if (!fields) {
         res.status(400).send("Bad Request");
         return;

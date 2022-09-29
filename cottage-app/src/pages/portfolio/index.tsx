@@ -26,11 +26,12 @@ import PortfolioProjects from "./components/PortfolioProjects";
 import backgroundImage from "./png-background.png";
 import TotalWinnings from "./components/WinningsTotal";
 import { GithubHeatmap } from "./components/GithubHeatmap";
+import CompetitionSuggestions from "./components/CompetitionSuggestions";
 
 const ANIM_DELAY = 500;
 
 const Portfolio = () => {
-  const isMobileWidth = useMediaQuery("(max-width:600px)");
+  const isMobileWidth = useMediaQuery("(max-width:900px)");
 
   const userRecordId = 'rec4lNKjVyoi66F2s';
   const isPublicProfile = !!queryParams.publicProfileID;
@@ -109,20 +110,6 @@ const Portfolio = () => {
               </Box>
             </div>
           </Fade>
-          
-          <Fade
-            in={true}
-            style={{ transitionDelay: `${ANIM_DELAY + 600}ms` }}
-            timeout={{ enter: 500 }}
-          >
-            <div>
-              <Box sx={{ mt: 4,  }}>
-                {!loading && (
-                  <TotalWinnings profileData={profileData}/>
-                )}
-              </Box>
-            </div>
-          </Fade>
           <Fade
             in={true}
             style={{ transitionDelay: `${ANIM_DELAY + 600}ms` }}
@@ -139,7 +126,7 @@ const Portfolio = () => {
               </Box>
             </div>
           </Fade>
-          {/*<Fade
+         { /*<Fade
             in={true}
             style={{ transitionDelay: `${ANIM_DELAY + 600}ms` }}
             timeout={{ enter: 500 }}
@@ -163,9 +150,14 @@ const Portfolio = () => {
               style={{ transitionDelay: `${ANIM_DELAY + 800}ms` }}
               timeout={{ enter: 500 }}
             >
+              <Stack direction={"column"} spacing={3}>
               <div>
                 {!loading && <ProfileChecklist profileData={profileData} />}
               </div>
+              <div>
+                {<CompetitionSuggestions profileData={profileData} />}
+              </div>
+              </Stack>
             </Fade>
           </Grid>
         )}

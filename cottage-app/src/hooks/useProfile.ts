@@ -7,9 +7,11 @@ import {
   getDefaultProfileFields,
 } from "../constants";
 import ProfileData from "../pages/portfolio/types/ProfileData";
-import { formatProjectAPIResponse } from "../utils/formatters";
+import { formatSubmissionsAPIResponse } from "../utils/formatters";
 import getLoggedInUserName from "../utils/getLoggedInUserName";
 import getLoggedInUserRecordID from "../utils/getLoggedInUserRecordID";
+import { formatProjectAPIResponse } from "../utils/projectFormatters";
+
 
 interface OwnProps {
   userRecordId: string;
@@ -39,13 +41,12 @@ export default function useProfile({ userRecordId }: OwnProps) {
           throw err;
         }
       }
-      
       const profileData = response.data.map((d: any) => ({
         name: d["Developer Name"],
         avatarUrl: d["Profile Picture"] ? d["Profile Picture"][0].url : "",
         username: d["Username"],
         location: d["Location"],
-        competitionSubmission: d["Submissions (from Users)"],
+        competitionSubmission: d["Submissions"] || [],
         skills: d["Skills"],
         aboutMe: d["About Me"],
         projects: d["Projects"] || [],
@@ -55,7 +56,10 @@ export default function useProfile({ userRecordId }: OwnProps) {
         totalWon: d["Total Number of Submissions Won (from Users)"],
         totalWinnings: d["Total Winnings"],
       }));
-
+       console.log(response)
+      profileData[0].competitionSubmission = profileData[0].competitionSubmission.map((p: any) =>
+        formatSubmissionsAPIResponse(p)
+      );
       profileData[0].projects = profileData[0].projects.map((p: any) =>
         formatProjectAPIResponse(p)
       );

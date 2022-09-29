@@ -9,7 +9,7 @@ import {
   Typography,
   Grid,
   Divider,
-  Button,
+  Stack,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
@@ -17,6 +17,7 @@ import CompetitionCard from "./CompetitionCard";
 import Modal from "./Modal";
 import ProfileData from "../../types/ProfileData";
 import EditProject from "../EditProject";
+import TotalWinnings from "../WinningsTotal";
 
 const Paper = ({
   children,
@@ -60,7 +61,6 @@ export default function CompetitionSubmissions({
     openModal();
   };
   const onEditProject = (index: number) => {
-    console.log(index);
     setIsModalForEdit(true);
     openModal();
   };
@@ -91,14 +91,14 @@ export default function CompetitionSubmissions({
           p: 2,
         }}
       >
-        <Box sx={{ display: "flex", gap: "12px", alignItems: "center", }}>
+        <Box sx={{ gap: "12px", }}>
+          <Stack direction={"column"}>
           <Typography
             variant="h5"
             sx={{
               color: "#111827",
-              fontWeight: "500",
-              fontSize: "18px",
-              marginRight: "auto",
+              fontSize: "1.2rem",
+              margin: ".5rem auto 1.6rem auto",
             }}
           >
             Competition Submissions
@@ -134,7 +134,9 @@ export default function CompetitionSubmissions({
             >
               Edit
             </Button>
-          ) : null} */}
+            ) : null} */}
+            <TotalWinnings profileData={profileData}/>
+            </Stack>
         </Box>
 
         {profileData.projects.filter(
@@ -142,12 +144,11 @@ export default function CompetitionSubmissions({
         ).length > 0 ? (
           <Divider color="black" sx={{ margin: "24px 0", opacity: "0.1", }} />
         ) : null}
-
-        <Grid container spacing={4} sx={{ padding: "0 24px" }}>
-          {profileData.projects
+        <Grid container spacing={4} sx={{ padding: "2rem 24px", }}>
+          {profileData.competitionSubmission
             .filter((p) => !deletedProjects.includes(p.recordId))
             .map((project, index) => (
-              <Grid item xs={12} md={6} lg={4}>
+              <Grid item xs={12} md={6} lg={4} >
                 <CompetitionCard
                   project={project}
                   key={index}

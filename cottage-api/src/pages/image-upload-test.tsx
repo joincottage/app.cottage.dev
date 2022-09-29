@@ -19,7 +19,7 @@ export default function PrivatePage() {
     //@ts-ignore
     body.append("file", image);
     const response = await fetch(
-      `/api/google-cloud-storage/upload?subfolder=projects&title=asdf&description=fffffff&link=httpsdsafdsafs&loggedInUsersRecordID=${getLoggedInUserRecordID()}`,
+      `/api/google-cloud-storage/upload?subfolder=submissions&title=asdf&description=fffffff&link=httpsdsafdsafs&loggedInUsersRecordID=${getLoggedInUserRecordID()}`,
       {
         method: "POST",
         body,

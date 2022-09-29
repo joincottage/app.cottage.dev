@@ -11,7 +11,7 @@ import {
   Fade,
   Link,
   Stack,
-  Dialog,
+  Badge,
   DialogTitle,
   DialogActions,
   DialogContent,
@@ -27,6 +27,9 @@ import Modal from "./Modal";
 import queryParams from "../../../../utils/queryParams";
 import axios from "axios";
 import { API_URL } from "../../../../constants";
+
+import { styled } from '@mui/material/styles';
+import useSubmission from "../../../../hooks/useTask";
 
 interface OwnProps {
   project: Project;
@@ -47,7 +50,7 @@ export default function CompetitionCard({ project, onDelete }: OwnProps) {
     onDelete(project.recordId);
     closeDialog();
     await axios.delete(
-      `${API_URL}/api/airtable/projects?recordId=${project.recordId}`
+      `${API_URL}/api/airtable/submissions?recordId=${project.recordId}`
     );
   };
 
@@ -59,30 +62,56 @@ export default function CompetitionCard({ project, onDelete }: OwnProps) {
     setDialogOpen(false);
   };
 
+  const StyledBadge = styled(Badge)<BadgeProps>(({ theme }) => ({
+    '& .MuiBadge-badge': {
+      right: 25,
+      top: 1,
+    },
+  }));
+  let renderStatus;
+
+  switch (description) {
+    case "Awaiting Review":
+      renderStatus = <Typography display="inline" sx={{ backgroundColor: "rgba(255, 251, 128, 0.8)", borderRadius: "20px",
+      fontSize: "1rem", marginRight: "3.2rem", padding: ".35rem .4rem", color: 'black', }}> Awaiting Review </Typography>;
+      break;
+      case "Rejected":
+      renderStatus = <Typography display="inline" sx={{ backgroundColor: "rgba(38, 97, 246, 0.8)", borderRadius: "20px",
+      fontSize: "1rem", padding: ".35rem .4rem", color: '#fff',}}> Reviewed </Typography>;
+      break;
+    case "Finalist":
+      renderStatus = <Typography display="inline" sx={{ backgroundColor: "rgba(194, 249, 157, .8)", borderRadius: "20px",
+      fontSize: "1.1rem", padding: ".35rem .5rem", color: 'black',}}>  Winner! </Typography>;
+      break;
+  }
+
   return (
+    
+    <StyledBadge 
+    badgeContent={renderStatus} 
+    sx={{
+      zIndex: 7, 
+      display: "flex",
+      flexDirection: "column", 
+      maxWidth: "344px",
+      height: "280px", 
+      marginRight: '.5rem',
+      }}>
     <Card
       sx={{
         display: "flex",
         flexDirection: "column",
         maxWidth: "344px",
         height: "280px",
-        border: "none",
-        boxShadow: "none",
-        color: "#111827",
+        boxShadow: "1x 1px",
+        backgroundColor: "#FFF",
+        zIndex: -5,
+        justifySelf: "center",
       }}
     >
+    
+      
       <Link href={link}>
-        <Modal open={modalOpen} setOpen={toggleModal}>
-          <EditProject
-            onComplete={({ project: newlyUpdatedProject }) => {
-              setUpdatedProject(newlyUpdatedProject);
-              toggleModal(false);
-            }}
-            onClose={() => toggleModal(false)}
-            isModalForEdit={true}
-            project={project}
-          />
-        </Modal>
         <ProgressiveImage src={demoImage} placeholder="">
           {(src) => (
             <div
@@ -126,64 +155,36 @@ export default function CompetitionCard({ project, onDelete }: OwnProps) {
       >
         <Typography
           sx={{
-            fontFamily: "Inter",
             fontStyle: "normal",
             fontWeight: "500",
+            color: "black",
           }}
         >
           {name}
         </Typography>
+     
+        <Link href={link} target={"_blank"} sx={{textDecoration: "none",}} >
         <Typography
           sx={{
-            fontFamily: "Inter",
             fontSize: "14px",
-            lineHeight: "22px",
-            color: "#6B7280",
+            paddingY: ".25rem",
+            border: "1px solid #E5E7EB",
+            boxShadow: "0px 1px 2px rgba(0,0,0,.04)",
+            color: "#374151",
+            borderRadius: "20px",
+            textAlign: "center",
+            opacity: "0.98",
+            position: "absolute",
+            width: "90%",
+            bottom: 12,
           }}
         >
-          {description}
+          View in StackBlitz Editor
         </Typography>
+        </Link>
       </CardContent>
-      {!isPublicProfile && (
-        <Stack direction="row" justifyContent="space-between">
-          <Button
-            sx={{
-              padding: "7px 16px",
-              border: "1px solid #E5E7EB",
-              boxShadow: "0px 1px 2px rgba(0,0,0,.04)",
-              color: "#374151",
-              fontSize: "14px",
-              fontWeight: 500,
-              width: "65px",
-            }}
-            onClick={toggleModal}
-          >
-            Edit
-          </Button>
-          <IconButton aria-label="delete" onClick={openDialog}>
-            <DeleteIcon />
-          </IconButton>
-        </Stack>
-      )}
-      <Dialog
-        open={dialogOpen}
-        aria-labelledby="delete-dialog-title"
-        aria-describedby="delete-dialog-description"
-      >
-        <DialogTitle id="delete-dialog-title">Confirm Deletion</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="delete-dialog-description">
-            You are about to delete this project. The action is permanent, are
-            you sure?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDeleteProject} variant="contained">
-            Confirm
-          </Button>
-          <Button onClick={closeDialog}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
     </Card>
+    </StyledBadge>
+  
   );
 }

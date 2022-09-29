@@ -42,7 +42,7 @@ export default function BoxComponent({ openModal, hideEditProfileButton }: OwnPr
             boxShadow: "0px 1px 2px rgba(0,0,0,.04)",
             borderRadius: "100px",
             color: "#374151",
-            fontSize: "14px",
+            fontSize: ".8rem",
             fontWeight: 500,
           }}
           onClick={onEdit}

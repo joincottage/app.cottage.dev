@@ -15,6 +15,7 @@ import queryParams from "../../../../scripts/misc/queryParams";
 import InsertLinkIcon from '@mui/icons-material/InsertLink';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import getLoggedInUserRecordID from "../../../../utils/getLoggedInUserRecordID";
+import CompetitionSuggestions from "../CompetitionSuggestions";
 
 const Paper = ({
   children,
@@ -135,46 +136,7 @@ export default function ProfileChecklist() {
 
   return (
     <Box>
-      {!isPublicProfile && (
-                  <Tooltip
-                    title={
-                      <Box sx={{ display: "relative" }}>
-                        <Typography
-                          variant="body1"
-                          sx={{ textAlign: "center" }}
-                        >
-                          Public profile URL copied to clipboard!
-                        </Typography>
-                      </Box>
-                    }
-                    placement="bottom-end"
-                    arrow
-                    open={showTooltip}
-                  >
-                    <Stack
-                      direction="column"
-                      sx={{ mt: 1 }}
-                      spacing={1}
-                      justifyContent="space-around"
-                    >
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      startIcon={<LinkedInIcon />}
-                      onClick={handleShareProfileClickLinkedIn}
-                    >
-                      Share
-                    </Button>
-                    <Button
-                      variant="contained"
-                      startIcon={<InsertLinkIcon />}
-                      onClick={handleShareProfileClick}
-                    >
-                        Share
-                    </Button>
-                    </Stack>
-                  </Tooltip>
-                )}
+      
       {numProfileFieldsComplete < TOTAL_NUM_PROFILE_FIELDS && (
       <>
       <Typography variant="h6" sx={{ fontSize: "16px", textAlign: "center", mt: "1rem", }}>

@@ -117,7 +117,7 @@ export default function PortfolioProjects({
               New Project
             </Button>
           )}
-          {/* {profileData.projects.length > 0 ? (
+          {profileData.projects.length > 0 ? (
             <Button
               variant="contained"
               sx={{
@@ -133,27 +133,27 @@ export default function PortfolioProjects({
             >
               Edit
             </Button>
-          ) : null} */}
+          ) : null}
         </Box>
 
-        {profileData.projects.filter(
+        {/*profileData.projects.filter(
           (p) => !deletedProjects.includes(p.recordId)
         ).length > 0 ? (
           <Divider color="black" sx={{ margin: "24px 0", opacity: "0.1",}} />
-        ) : null}
-
+        ) : null*/}
+    {console.log(profileData)}
         <Grid container spacing={4} sx={{ padding: "0 24px" }}>
           {profileData.projects
-            .filter((p) => !deletedProjects.includes(p.recordId))
-            .map((project, index) => (
-              <Grid item xs={12} md={6} lg={4}>
+            .map((project, index) => {
+              console.log(project)
+             return (<Grid item xs={12} md={6} lg={4}>
                 <PortfolioCard
                   project={project}
                   key={index}
                   onDelete={handleProjectCardDelete}
                 />
-              </Grid>
-            ))}
+              </Grid>)
+            })}
         </Grid>
       </Box>
     </Paper>

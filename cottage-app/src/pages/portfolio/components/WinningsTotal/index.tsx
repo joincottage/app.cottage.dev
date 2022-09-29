@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import {
-  Box,
+  Stack,
   Container,
   Typography,
-  Grid,
+  Box,
   Paper,
   Button,
+  useMediaQuery,
 } from "@mui/material";
 import ProfileData from "../../types/ProfileData";
 
@@ -16,114 +17,99 @@ interface OwnProps {
 export default function TotalWinnings({
   profileData: initialProfileData,
 }: OwnProps) {
-  
+  let direction;
+  let breakWidth;
+  const isBreakWidth = useMediaQuery("(max-width:900px)");
   const [profileData, setProfileData] = useState(initialProfileData);
-
+  isBreakWidth ? direction = "column" : direction = "row" ;
+  isBreakWidth ? breakWidth = "55vw" : breakWidth = "12vw";
   return (
-   
-        <Box sx={{ 
-          display: "flex", 
-          gap: "12px", 
-          alignItems: "center", 
-          justifyContent: "space-around", 
-          }}>
-            <Paper sx={{
-        borderRadius: "10px",
-        color: "black",
-        padding: "1rem 2.4rem",
-        backgroundColor: "#fff",
-               }}>
+            
+        <Stack direction={direction} sx={{
+          display: "flex",
+          gap: "12px",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}>
+          
           <Typography
             variant="h2"
             sx={{
-              padding: "1.2rem 1rem",
+              padding: ".5rem 1rem",
               borderRadius: "10px",
               fontWeight: "500",
-              fontSize: "18px",
+              fontSize: "16px",
               backgroundColor: "white",
               textAlign: "center",
-              opacity: "0.9",
+              opacity: "0.95",
+              width: `${breakWidth}`,
             }}
           >
-            Total Competition Submissions
-            <Typography sx={{ 
-              marginTop: "1rem", 
-              backgroundColor: "rgb(38, 97, 246)", 
-              border: '2px solid #fff', 
-              borderRadius: "10px", 
+            Submitted
+            <Typography sx={{
+              marginTop: "1rem",
+              backgroundColor: "rgba(38, 97, 246, 0.8)",
+              border: '2px solid #fff',
+              borderRadius: "30px",
               color: "#fff",
-              fontSize: "1.4rem",
+              fontSize: "1.2rem",
               paddingY: ".7rem",
-              }}>
-           {profileData.totalSubmissions}
+            }}>
+              {profileData.totalSubmissions}
+            </Typography>
           </Typography>
-          </Typography>
-          </Paper>
-          <Paper sx={{
-        borderRadius: "10px",
-        color: "black",
-        padding: "1rem 2.4rem",
-        backgroundColor: "#fff",
-               }}>
           <Typography
             variant="h2"
             sx={{
-              padding: "1.2rem 1rem",
+              padding: "1rem 1rem",
               borderRadius: "10px",
               fontWeight: "500",
-              fontSize: "18px",
+              fontSize: "16px",
               backgroundColor: "white",
               textAlign: "center",
-              opacity: "0.9",
+              opacity: "0.95",
+              width: `${breakWidth}`,
             }}
           >
-            Total Competitions Won  
-          <Typography sx={{ 
-              marginTop: "1rem", 
-              backgroundColor: "rgb(38, 97, 246)", 
-              border: '2px solid #fff', 
-              borderRadius: "10px", 
+            Winners
+            <Typography sx={{
+              marginTop: "1rem",
+              backgroundColor: "rgba(38, 97, 246, 0.8)",
+              border: '2px solid #fff',
+              borderRadius: "30px",
               color: "#fff",
-              fontSize: "1.4rem",
+              fontSize: "1.2rem",
               paddingY: ".7rem",
-              }}>
+            }}>
               {profileData.totalWon}
-              </Typography>
-           </Typography>
-          </Paper>
-          <Paper sx={{
-        borderRadius: "10px",
-        color: "black",
-        padding: "1rem 2.4rem",
-        backgroundColor: "#fff",
-               }}>
+            </Typography>
+          </Typography>
           <Typography
             variant="h2"
             sx={{
-              padding: "1.2rem 1rem",
+              padding: "1rem 1rem",
               borderRadius: "10px",
               fontWeight: "500",
-              fontSize: "18px",
+              fontSize: "16px",
               backgroundColor: "white",
               textAlign: "center",
-              opacity: "0.9",
+              opacity: "0.95",
+              width: `${breakWidth}`,
             }}
           >
-            Total Winnings 
-          <Typography sx={{ 
-              marginTop: "1rem", 
-              backgroundColor: "rgb(38, 97, 246)", 
-              border: '2px solid #fff', 
-              borderRadius: "10px", 
+            Winnings
+            <Typography sx={{
+              marginTop: "1rem",
+              backgroundColor: "rgba(38, 97, 246, 0.8)",
+              border: '2px solid #fff',
+              borderRadius: "30px",
               color: "#fff",
-              fontSize: "1.4rem",
+              fontSize: "1.2rem",
               paddingY: ".7rem",
-              }}>
-                 ${profileData.totalWinnings}   
-              </Typography>
-           </Typography>
-          </Paper>
-      </Box>
-    
+            }}>
+              ${profileData.totalWinnings}
+            </Typography>
+          </Typography>
+        </Stack>
   );
 }
