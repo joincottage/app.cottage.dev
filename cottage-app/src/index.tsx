@@ -66,5 +66,5 @@ window.Cottage = window.Cottage || {};
 window.Cottage.renderPage = renderPage;
 
 if (process.env.REACT_APP_TEST_ENV === "dev") {
-  renderPage("portfolio");
+  renderPage("task-details");
 }

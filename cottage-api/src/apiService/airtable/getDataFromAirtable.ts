@@ -11,7 +11,7 @@ interface RequiredParams {
 export default async function getDataFromAirtable({
   tableName,
   filterByFormula = "",
-  view = "Grid View",
+  view = "Grid view",
   baseId = "appf3p4te7SoyVHB1",
   sort,
 }: RequiredParams): Promise<{ data: any[] }> {
