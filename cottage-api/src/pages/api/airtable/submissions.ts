@@ -19,13 +19,14 @@ async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ): Promise<void> {
-  await Cottage.runCottageMiddleware({
-    appName: appConfig.appName,
-    prodUrl: "",
-    requireSoftrAuth: true,
-    req,
-    res,
-  });
+  // await Cottage.runCottageMiddleware({
+  //   appName: appConfig.appName,
+  //   prodUrl: "",
+  //   requireSoftrAuth: true,
+  //   req,
+  //   res,
+  // });
+  await runMiddleware(req, res, cors(corsOptions));
 
   switch (req.method) {
     case "GET": {
