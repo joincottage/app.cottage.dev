@@ -79,10 +79,6 @@ const TaskDetails = () => {
     recordId: params.recordId,
     loggedInUserRecordID: getLoggedInUserRecordID(),
   });
-  const { data: submission, loading: submissionLoading } = useSubmission({
-    recordId: params.recordId,
-    loggedInUserRecordID: getLoggedInUserRecordID(),
-  });
   const [draftIsBeingSaved, setDraftIsBeingSaved] = useState(false);
   const [solutionIsBeingSubmitted, setSolutionIsBeingSubmitted] =
     useState(false);
@@ -108,20 +104,20 @@ const TaskDetails = () => {
           console.log(`Project ID extracted from previewUrl: ${projectId}`);
           setOldPreviewUrl(currentPreviewUrl);
 
-          if (submissionRecordId || doesAirtableItemExist(submission)) {
-            console.log(
-              `Updating previewUrl for submission ${
-                submissionRecordId || submission[0]["Record ID"]
-              }`
-            );
+          // if (submissionRecordId || doesAirtableItemExist(submission)) {
+          //   console.log(
+          //     `Updating previewUrl for submission ${
+          //       submissionRecordId || submission[0]["Record ID"]
+          //     }`
+          //   );
 
-            await updateSubmissionInAirtable(
-              submissionRecordId || submission[0]["Record ID"],
-              {
-                "Stackblitz Project ID": projectId,
-              }
-            );
-          } else {
+          //   await updateSubmissionInAirtable(
+          //     submissionRecordId || submission[0]["Record ID"],
+          //     {
+          //       "Stackblitz Project ID": projectId,
+          //     }
+          //   );
+          // } else {
             console.log("Creating new submission");
 
             const projectContents = await (
@@ -135,20 +131,20 @@ const TaskDetails = () => {
             );
             submissionRecordId = responseData["Record ID"];
           }
-        }
+        // }
       }
     }
     checkPreviewUrl();
   }, 10000);
 
-  useEffect(() => {
-    if (!taskLoading && !submissionLoading && submission.length === 0) {
-      // @ts-ignore
-      // window.posthog.capture("competition start", {
-      //   taskRecordIdInAirtable: task[0]["Record ID"],
-      // });
-    }
-  }, [submissionLoading, taskLoading]);
+  // useEffect(() => {
+  //   if (!taskLoading && !submissionLoading && submission.length === 0) {
+  //     // @ts-ignore
+  //     // window.posthog.capture("competition start", {
+  //     //   taskRecordIdInAirtable: task[0]["Record ID"],
+  //     // });
+  //   }
+  // }, [submissionLoading, taskLoading]);
 
   const onSaveDraft = () => {
     async function saveDraft() {
@@ -158,8 +154,9 @@ const TaskDetails = () => {
         window as any
       ).stackblitzVM.getFsSnapshot();
 
-      const submissionToSave =
-        (submission && submission[0]) || newlyCreatedSubmission;
+      // const submissionToSave =
+      //   (submission && submission[0]) || newlyCreatedSubmission;
+      const submissionToSave = newlyCreatedSubmission;
       if (submissionToSave) {
         await updateSubmissionInAirtable(
           submissionToSave,
@@ -194,7 +191,7 @@ const TaskDetails = () => {
 
     const projectContents = await (window as any).stackblitzVM.getFsSnapshot();
 
-    const submissionToSubmit = submission[0] || newlyCreatedSubmission;
+    const submissionToSubmit = newlyCreatedSubmission;
     await updateSubmissionInAirtable(
       submissionToSubmit,
       JSON.stringify(projectContents, null, 2),
@@ -211,30 +208,30 @@ const TaskDetails = () => {
   };
 
   // Rather than render conditionally, show responsive screens as overlays so that code gets saved
-  if (
-    submission &&
-    submission.length > 0 &&
-    submission[0].IsDraft === "false"
-  ) {
-    return (
-      <Container maxWidth="sm" sx={{ mt: 3 }}>
-        <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
-          <Typography variant="h4">We respect the hustle</Typography>
-        </Box>
-        <Box sx={{ pl: 1, pr: 1 }}>
-          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
-            ...but you've already submitted a solution for this competition.
-          </Typography>
-          <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
-            Head back to the home page and get started on a competition that you
-            haven't tried yet!
-          </Typography>
-        </Box>
-      </Container>
-    );
-  }
+  // if (
+  //   submission &&
+  //   submission.length > 0 &&
+  //   submission[0].IsDraft === "false"
+  // ) {
+  //   return (
+  //     <Container maxWidth="sm" sx={{ mt: 3 }}>
+  //       <Box sx={{ p: 1, display: "flex", justifyContent: "center" }}>
+  //         <Typography variant="h4">We respect the hustle</Typography>
+  //       </Box>
+  //       <Box sx={{ pl: 1, pr: 1 }}>
+  //         <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+  //           ...but you've already submitted a solution for this competition.
+  //         </Typography>
+  //         <Typography variant="body1" gutterBottom sx={{ textAlign: "center" }}>
+  //           Head back to the home page and get started on a competition that you
+  //           haven't tried yet!
+  //         </Typography>
+  //       </Box>
+  //     </Container>
+  //   );
+  // }
 
-  return submissionLoading || taskLoading ? null : (
+  return taskLoading ? null : (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <Helmet>
         <style>{`
@@ -270,7 +267,7 @@ const TaskDetails = () => {
               content: (
                 <Editor
                   task={params.recordId ? task : null}
-                  submission={submission}
+                  submission={null}
                 />
               ),
             },
